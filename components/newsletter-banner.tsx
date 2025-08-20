@@ -10,7 +10,7 @@ export default function NewsletterBanner() {
   if (!isVisible) return null
 
   return (
-    <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 relative">
+    <div className="bg-gradient-to-r from-[#54a09b] to-[#000080] text-white py-3 px-4 relative">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Mail className="w-5 h-5" />
@@ -20,7 +20,7 @@ export default function NewsletterBanner() {
           <Button
             size="sm"
             variant="secondary"
-            className="bg-white text-purple-600 hover:bg-white/90"
+            className="bg-white text-[#54a09b] hover:bg-white/90"
             onClick={() => {
               // Scroll to newsletter section or open popup
               const newsletterSection = document.querySelector("#newsletter-signup")

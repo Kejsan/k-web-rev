@@ -237,20 +237,21 @@ class EmailService {
 
 // Configuration - Replace with your actual credentials
 export const emailServiceConfig: EmailServiceConfig = {
-  // Choose your provider: 'mailchimp' | 'convertkit' | 'emailoctopus' | 'buttondown' | 'custom'
-  provider: "mailchimp", // Change this to your preferred provider
+  // Change provider to EmailOctopus
+  provider: "emailoctopus",
 
+  // EmailOctopus configuration
+  apiKey: process.env.EMAILOCTOPUS_API_KEY,
+  listId: process.env.EMAILOCTOPUS_LIST_ID,
+
+  // Comment out other providers
   // Mailchimp configuration
-  apiKey: process.env.MAILCHIMP_API_KEY,
-  audienceId: process.env.MAILCHIMP_AUDIENCE_ID,
+  // apiKey: process.env.MAILCHIMP_API_KEY,
+  // audienceId: process.env.MAILCHIMP_AUDIENCE_ID,
 
   // ConvertKit configuration
   // apiKey: process.env.CONVERTKIT_API_KEY,
   // formId: process.env.CONVERTKIT_FORM_ID,
-
-  // EmailOctopus configuration
-  // apiKey: process.env.EMAILOCTOPUS_API_KEY,
-  // listId: process.env.EMAILOCTOPUS_LIST_ID,
 
   // Buttondown configuration
   // apiKey: process.env.BUTTONDOWN_API_KEY,

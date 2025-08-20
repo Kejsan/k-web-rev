@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import anime from "animejs"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -13,22 +12,38 @@ export default function BlogPage() {
   const blogRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    anime({
-      targets: ".blog-header",
-      translateY: [50, 0],
-      opacity: [0, 1],
-      duration: 800,
-      easing: "easeOutExpo",
-    })
+    // Load anime.js dynamically
+    const loadAnime = async () => {
+      try {
+        const anime = (await import("animejs")).default
 
-    anime({
-      targets: ".blog-post-card",
-      translateY: [30, 0],
-      opacity: [0, 1],
-      duration: 600,
-      delay: anime.stagger(100),
-      easing: "easeOutExpo",
-    })
+        anime({
+          targets: ".blog-header",
+          translateY: [50, 0],
+          opacity: [0, 1],
+          duration: 800,
+          easing: "easeOutExpo",
+        })
+
+        anime({
+          targets: ".blog-post-card",
+          translateY: [30, 0],
+          opacity: [0, 1],
+          duration: 600,
+          delay: anime.stagger(100),
+          easing: "easeOutExpo",
+        })
+      } catch (error) {
+        console.log("Anime.js not available, using CSS animations as fallback")
+        // Fallback: just show elements without animations
+        const elements = document.querySelectorAll(".blog-header, .blog-post-card")
+        elements.forEach((el) => {
+          ;(el as HTMLElement).style.opacity = "1"
+        })
+      }
+    }
+
+    loadAnime()
   }, [])
 
   const blogPosts = [
@@ -133,7 +148,7 @@ export default function BlogPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-[#000080] to-slate-900">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -152,7 +167,7 @@ export default function BlogPage() {
       <div className="pt-20">
         {/* Header */}
         <section className="py-20 px-4">
-          <div className="max-w-4xl mx-auto text-center blog-header opacity-0">
+          <div className="max-w-4xl mx-auto text-center blog-header">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">SEO & Marketing Insights</h1>
             <p className="text-xl text-white/80 mb-8">
               Real-world strategies, case studies, and lessons learned from scaling digital presence for tech companies
@@ -164,7 +179,7 @@ export default function BlogPage() {
                 <input
                   type="text"
                   placeholder="Search articles..."
-                  className="pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-purple-400 w-80"
+                  className="pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-[#54a09b] w-80"
                 />
               </div>
             </div>
@@ -189,7 +204,7 @@ export default function BlogPage() {
                 <Badge
                   key={category}
                   variant="secondary"
-                  className="bg-white/10 text-white hover:bg-purple-500/20 cursor-pointer px-4 py-2"
+                  className="bg-[#54a09b]/20 text-[#54a09b] hover:bg-[#54a09b]/40 cursor-pointer px-4 py-2"
                 >
                   {category}
                 </Badge>
@@ -208,7 +223,7 @@ export default function BlogPage() {
                 .map((post, index) => (
                   <Card
                     key={post.slug}
-                    className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm opacity-0 hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                    className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
                     onClick={() => (window.location.href = `/blog/${post.slug}`)}
                   >
                     <div className="aspect-video overflow-hidden rounded-t-lg">
@@ -220,7 +235,7 @@ export default function BlogPage() {
                     </div>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="secondary" className="bg-purple-500/20 text-purple-300">
+                        <Badge variant="secondary" className="bg-[#54a09b]/20 text-[#54a09b]">
                           {post.category}
                         </Badge>
                         <span className="text-white/40">•</span>
@@ -236,7 +251,7 @@ export default function BlogPage() {
                           <Calendar className="w-4 h-4" />
                           {post.date}
                         </div>
-                        <Button size="sm" variant="ghost" className="text-purple-400 hover:text-purple-300">
+                        <Button size="sm" variant="ghost" className="text-[#54a09b] hover:text-[#54a09b]/80">
                           Read More →
                         </Button>
                       </div>
@@ -255,7 +270,7 @@ export default function BlogPage() {
               {blogPosts.map((post, index) => (
                 <Card
                   key={post.slug}
-                  className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm opacity-0 hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                  className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
                   onClick={() => (window.location.href = `/blog/${post.slug}`)}
                 >
                   <div className="aspect-video overflow-hidden rounded-t-lg">
@@ -267,7 +282,7 @@ export default function BlogPage() {
                   </div>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 text-xs">
+                      <Badge variant="secondary" className="bg-[#54a09b]/20 text-[#54a09b] text-xs">
                         {post.category}
                       </Badge>
                       <span className="text-white/40">•</span>
@@ -283,7 +298,7 @@ export default function BlogPage() {
                         <Calendar className="w-3 h-3" />
                         {post.date}
                       </div>
-                      <Button size="sm" variant="ghost" className="text-purple-400 hover:text-purple-300 text-xs">
+                      <Button size="sm" variant="ghost" className="text-[#54a09b] hover:text-[#54a09b]/80 text-xs">
                         Read →
                       </Button>
                     </div>

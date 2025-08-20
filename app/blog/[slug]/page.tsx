@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react"
 import { useParams } from "next/navigation"
-import anime from "animejs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, Clock, Share2, Linkedin, Twitter } from "lucide-react"
@@ -14,22 +13,38 @@ export default function BlogPost() {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    anime({
-      targets: ".blog-post-header",
-      translateY: [50, 0],
-      opacity: [0, 1],
-      duration: 800,
-      easing: "easeOutExpo",
-    })
+    // Load anime.js dynamically
+    const loadAnime = async () => {
+      try {
+        const anime = (await import("animejs")).default
 
-    anime({
-      targets: ".blog-post-content",
-      translateY: [30, 0],
-      opacity: [0, 1],
-      duration: 600,
-      delay: 200,
-      easing: "easeOutExpo",
-    })
+        anime({
+          targets: ".blog-post-header",
+          translateY: [50, 0],
+          opacity: [0, 1],
+          duration: 800,
+          easing: "easeOutExpo",
+        })
+
+        anime({
+          targets: ".blog-post-content",
+          translateY: [30, 0],
+          opacity: [0, 1],
+          duration: 600,
+          delay: 200,
+          easing: "easeOutExpo",
+        })
+      } catch (error) {
+        console.log("Anime.js not available, using CSS animations as fallback")
+        // Fallback: just show elements without animations
+        const elements = document.querySelectorAll(".blog-post-header, .blog-post-content")
+        elements.forEach((el) => {
+          ;(el as HTMLElement).style.opacity = "1"
+        })
+      }
+    }
+
+    loadAnime()
   }, [])
 
   // This would typically come from a CMS or API
@@ -369,11 +384,11 @@ The key to scaling content marketing for AI companies isn't just creating more c
 
   if (!currentPost) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-[#000080] to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1>
           <Link href="/blog">
-            <Button className="bg-purple-600 hover:bg-purple-700">
+            <Button className="bg-[#54a09b] hover:bg-[#000080]">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
             </Button>
@@ -384,7 +399,7 @@ The key to scaling content marketing for AI companies isn't just creating more c
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-[#000080] to-slate-900">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -408,9 +423,9 @@ The key to scaling content marketing for AI companies isn't just creating more c
       <div className="pt-20">
         {/* Header */}
         <section className="py-12 px-4">
-          <div className="max-w-4xl mx-auto blog-post-header opacity-0">
+          <div className="max-w-4xl mx-auto blog-post-header">
             <div className="mb-6">
-              <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 mb-4">
+              <Badge variant="secondary" className="bg-[#54a09b]/20 text-[#54a09b] mb-4">
                 {currentPost.category}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{currentPost.title}</h1>
@@ -437,7 +452,7 @@ The key to scaling content marketing for AI companies isn't just creating more c
 
             <div className="flex items-center justify-between py-4 border-y border-white/10">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-[#54a09b] to-[#000080] rounded-full flex items-center justify-center">
                   <span className="text-white font-bold">K</span>
                 </div>
                 <div>
@@ -462,7 +477,7 @@ The key to scaling content marketing for AI companies isn't just creating more c
           <div className="max-w-4xl mx-auto">
             <div
               ref={contentRef}
-              className="blog-post-content opacity-0 prose prose-lg prose-invert max-w-none"
+              className="blog-post-content prose prose-lg prose-invert max-w-none"
               style={{
                 color: "rgba(255, 255, 255, 0.8)",
               }}
