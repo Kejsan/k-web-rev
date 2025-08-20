@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Linkedin, Mail, Search, TrendingUp, Users, Podcast, BarChart3, PenTool, X } from "lucide-react"
+import { Linkedin, Mail, Search, TrendingUp, Users, Podcast, BarChart3, PenTool, X, ChevronUp } from "lucide-react"
+import Link from "next/link"
 
 export default function Portfolio() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -11,6 +12,8 @@ export default function Portfolio() {
   const experienceRef = useRef<HTMLDivElement>(null)
   const blogRef = useRef<HTMLDivElement>(null)
   const [selectedExperience, setSelectedExperience] = useState<any>(null)
+  const [showAllExperiences, setShowAllExperiences] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -55,6 +58,15 @@ export default function Portfolio() {
               duration: 400,
             },
             "-=200",
+          )
+          .add(
+            {
+              targets: ".hero-image",
+              scale: [0.8, 1],
+              opacity: [0, 1],
+              duration: 800,
+            },
+            "-=400",
           )
 
         // Floating animation for hero elements
@@ -117,7 +129,9 @@ export default function Portfolio() {
       } catch (error) {
         console.log("Anime.js not available, using CSS animations as fallback")
         // Fallback: just show elements without animations
-        const elements = document.querySelectorAll(".hero-title, .hero-subtitle, .hero-description, .hero-buttons")
+        const elements = document.querySelectorAll(
+          ".hero-title, .hero-subtitle, .hero-description, .hero-buttons, .hero-image",
+        )
         elements.forEach((el) => {
           ;(el as HTMLElement).style.opacity = "1"
         })
@@ -125,7 +139,26 @@ export default function Portfolio() {
     }
 
     loadAnime()
+
+    // Scroll to top button visibility
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   const skills = [
     { name: "SEO Strategy", level: 95, icon: <Search className="w-8 h-8 text-[#fb6163]" /> },
@@ -136,7 +169,7 @@ export default function Portfolio() {
     { name: "Growth Marketing", level: 87, icon: <TrendingUp className="w-8 h-8 text-[#fb6163]" /> },
   ]
 
-  const experiences = [
+  const allExperiences = [
     {
       id: "division5",
       title: "Digital Marketing Specialist",
@@ -208,7 +241,7 @@ export default function Portfolio() {
       id: "cardo-ai",
       title: "Digital Marketing Specialist",
       company: "Cardo AI",
-      period: "Jan 2024 - Jul 2024",
+      period: "Oct 2021 - Jul 2024",
       location: "Tirana, Albania · Hybrid",
       description:
         "Enhanced digital presence through comprehensive SEO, content strategy, and email marketing initiatives",
@@ -217,14 +250,70 @@ export default function Portfolio() {
         "Led website redesign and migration without ranking loss",
         "Managed multi-channel email campaigns and social media",
       ],
-      fullDescription: `As a Digital Marketing Specialist at Cardo AI, I played a crucial role in driving our digital marketing efforts and enhancing our online presence. My responsibilities encompassed a range of activities aimed at optimizing our content, engaging our audience, and supporting our overall marketing strategy.`,
-      responsibilities: [
-        "Content Creation & Strategy: Research and develop new topics and ideas for content creation. Write compelling copy for social media captions and perform hashtag & trend research to maximize reach and engagement.",
-        "SEO Optimization: Involved in all aspects of SEO, including conducting keyword research, performing technical SEO audits, and implementing SEO fixes. Responsible for maintaining and updating the company website with SEO-optimized content, new pages, and articles. Provided major involvement and support during a website redesign, restructuring & migration with the purpose of keeping the website healthy and not lose rankings.",
-        "Email Marketing: Managed and wrote email campaigns targeted towards existing clients and potential leads. Create engaging content that nurtures relationships and drives conversions.",
-        "Newsletter Management: Launched and managed an internal weekly newsletter for our clients, providing them with valuable insights and updates. Additionally, supported the development of a monthly LinkedIn newsletter that has gained 3200+ subscribers after just two editions.",
-        "Collaboration & Analysis: Collaborated closely with other marketing team members on strategy development, design initiatives, and performance analysis to ensure alignment with our goals. Provided actionable insights based on data analysis to optimize future campaigns.",
+      // Career progression within the company
+      careerProgression: [
+        {
+          title: "Digital Marketing Specialist",
+          period: "Jan 2024 - Jul 2024",
+          type: "promotion",
+          description: "Promoted to lead comprehensive digital marketing strategy and cross-functional initiatives",
+          responsibilities: [
+            "Content Creation & Strategy: Research and develop new topics and ideas for content creation. Write compelling copy for social media captions and perform hashtag & trend research to maximize reach and engagement.",
+            "SEO Optimization: Involved in all aspects of SEO, including conducting keyword research, performing technical SEO audits, and implementing SEO fixes. Responsible for maintaining and updating the company website with SEO-optimized content, new pages, and articles. Provided major involvement and support during a website redesign, restructuring & migration with the purpose of keeping the website healthy and not lose rankings.",
+            "Email Marketing: Managed and wrote email campaigns targeted towards existing clients and potential leads. Create engaging content that nurtures relationships and drives conversions.",
+            "Newsletter Management: Launched and managed an internal weekly newsletter for our clients, providing them with valuable insights and updates. Additionally, supported the development of a monthly LinkedIn newsletter that has gained 3200+ subscribers after just two editions.",
+            "Collaboration & Analysis: Collaborated closely with other marketing team members on strategy development, design initiatives, and performance analysis to ensure alignment with our goals. Provided actionable insights based on data analysis to optimize future campaigns.",
+          ],
+          skills: [
+            "Content Management Systems (CMS)",
+            "Web Design",
+            "Digital Marketing",
+            "Content Management",
+            "Content Development",
+            "Content Marketing",
+            "Email Management",
+            "Email Newsletter Design",
+            "Email Marketing Software",
+            "WordPress",
+          ],
+        },
+        {
+          title: "Social Media & SEO Specialist",
+          period: "Oct 2021 - Dec 2023",
+          type: "initial",
+          description: "Built foundational social media strategy and SEO optimization during company's growth phase",
+          responsibilities: [
+            "Content Creation & Strategy: Research and develop new topics and ideas for content creation. Write compelling copy for social media captions and perform hashtag & trend research to maximize reach and engagement.",
+            "SEO Optimization: Involved in all aspects of SEO, including conducting keyword research, performing technical SEO audits, and implementing SEO fixes.",
+            "Social Media Management: Built and executed social media strategies across multiple platforms.",
+            "Performance Analysis: Tracked and analyzed social media and SEO performance metrics to optimize campaigns.",
+          ],
+          skills: [
+            "SEO Copywriting",
+            "Social Media",
+            "Online Marketing",
+            "Landing Page Optimization",
+            "Social Media Measurement",
+            "Instagram",
+            "Content Management",
+            "Digital Marketing",
+            "Web Content Writing",
+            "SEMrush",
+            "On-Page Optimization",
+            "Marketing",
+            "Social Media Marketing",
+            "LinkedIn Marketing",
+            "Content Strategy",
+            "Social Media Communications",
+            "Canva",
+            "Copywriting",
+            "Search Engine Optimization (SEO)",
+            "Off-Page SEO",
+            "LinkedIn",
+          ],
+        },
       ],
+      fullDescription: `As a Digital Marketing Specialist at Cardo AI, I played a crucial role in driving our digital marketing efforts and enhancing our online presence. Starting as a Social Media & SEO Specialist, I was promoted to Digital Marketing Specialist, expanding my responsibilities to encompass comprehensive digital marketing strategy.`,
       skills: [
         "Content Management Systems (CMS)",
         "Web Design",
@@ -236,14 +325,122 @@ export default function Portfolio() {
         "Email Newsletter Design",
         "Email Marketing Software",
         "WordPress",
+        "SEO Copywriting",
+        "Social Media Marketing",
+        "LinkedIn Marketing",
+        "Content Strategy",
+        "Search Engine Optimization (SEO)",
       ],
-      previousRole: {
-        title: "Social Media & SEO Specialist",
-        period: "Oct 2021 - Dec 2023",
-        note: "Promoted to Digital Marketing Specialist in January 2024",
-      },
+    },
+    {
+      id: "ipervox",
+      title: "SEO & Content Manager / Social Media Marketing Manager",
+      company: "Ipervox",
+      period: "Nov 2020 - Oct 2021",
+      location: "Tirana, Albania · Remote",
+      description:
+        "Dual role managing content strategy, SEO optimization, and social media presence for voice technology platform",
+      achievements: [
+        "Developed comprehensive content strategy for voice technology sector",
+        "Built social media presence across multiple platforms",
+        "Improved website traffic through SEO best practices",
+      ],
+      // Concurrent roles within the company
+      careerProgression: [
+        {
+          title: "SEO & Content Manager",
+          period: "Dec 2020 - Oct 2021",
+          type: "concurrent",
+          description: "Led content strategy and SEO optimization for voice technology platform",
+          responsibilities: [
+            "Conducting in-depth research on industry-related topics in order to develop original content",
+            "Developing content for the blog, social media, product descriptions, and the company website",
+            "Assisting the marketing team in developing content for advertising campaigns",
+            "Editing and polishing existing content to improve readability",
+            "Conducting keyword research and using SEO best practices to increase traffic to the company website",
+          ],
+          skills: [
+            "SEO Copywriting",
+            "Landing Page Optimization",
+            "Digital Marketing",
+            "Web Content Writing",
+            "SEMrush",
+            "On-Page Optimization",
+            "Marketing",
+            "Content Strategy",
+            "Off-Page SEO",
+          ],
+        },
+        {
+          title: "Social Media Marketing Manager",
+          period: "Nov 2020 - Oct 2021",
+          type: "concurrent",
+          description: "Managed social media presence and community engagement concurrently with content role",
+          responsibilities: [
+            "Research audience preferences and discover current trends",
+            "Create engaging text, image, and video content",
+            "Design posts to sustain readers' curiosity and engagement",
+            "Stay up-to-date with changes in all social platforms ensuring maximum effectiveness",
+            "Facilitate online conversations with customers and respond to queries",
+            "Report on online reviews and feedback from customers and fans",
+            "Develop an optimal posting schedule, considering web traffic and customer engagement metrics",
+            "Oversee social media accounts' layout",
+            "Suggest new ways to attract new audiences",
+          ],
+          skills: [
+            "Online Marketing",
+            "Social Media Measurement",
+            "Digital Marketing",
+            "Web Content Writing",
+            "Marketing",
+            "LinkedIn Marketing",
+            "Content Strategy",
+            "Social Media Communications",
+            "Canva",
+            "LinkedIn",
+          ],
+        },
+      ],
+      fullDescription: `Managed content creation, SEO strategy, and social media marketing for Ipervox, a voice technology platform that enables users to create voice applications for Amazon Alexa and Google Assistant. Held concurrent roles as both SEO & Content Manager and Social Media Marketing Manager.`,
+      skills: [
+        "SEO Copywriting",
+        "Landing Page Optimization",
+        "Digital Marketing",
+        "Web Content Writing",
+        "SEMrush",
+        "On-Page Optimization",
+        "Marketing",
+        "Content Strategy",
+        "Social Media Marketing",
+        "LinkedIn Marketing",
+        "Social Media Communications",
+        "Canva",
+        "LinkedIn",
+      ],
+    },
+    {
+      id: "linkedcopy",
+      title: "Content Writer",
+      company: "LinkedCopy",
+      period: "Mar 2020 - Jul 2021",
+      location: "Freelance",
+      description: "Freelance content writer creating blog articles and website copy for multiple brands",
+      achievements: [
+        "Wrote blog articles and website copy for multiple brands",
+        "Ghostwrote long-form pieces with supporting visuals",
+        "Aligned content with SEO requirements",
+      ],
+      fullDescription: `Freelance content writing role creating various types of content for different brands and clients.`,
+      responsibilities: [
+        "Wrote blog articles and website copy for multiple brands",
+        "Ghostwrote long-form pieces and prepared supporting visuals and blog assets",
+        "Aligned topics and metadata with basic SEO requirements and coordinated edits with clients",
+      ],
+      skills: ["SEO Copywriting", "Marketing"],
     },
   ]
+
+  const displayedExperiences = showAllExperiences ? allExperiences : allExperiences.slice(0, 3)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-[#000080] to-slate-900">
@@ -253,21 +450,39 @@ export default function Portfolio() {
           <div className="flex justify-between items-center py-4">
             <div className="text-white font-bold text-xl">Kejsan</div>
             <div className="hidden md:flex space-x-8">
-              <a href="#about" className="text-white/80 hover:text-white transition-colors">
+              <button
+                onClick={() => scrollToSection("about")}
+                className="text-white/80 hover:text-white transition-colors"
+              >
                 About
-              </a>
-              <a href="#skills" className="text-white/80 hover:text-white transition-colors">
+              </button>
+              <button
+                onClick={() => scrollToSection("skills")}
+                className="text-white/80 hover:text-white transition-colors"
+              >
                 Skills
-              </a>
-              <a href="#experience" className="text-white/80 hover:text-white transition-colors">
+              </button>
+              <button
+                onClick={() => scrollToSection("experience")}
+                className="text-white/80 hover:text-white transition-colors"
+              >
                 Experience
-              </a>
-              <a href="#blog" className="text-white/80 hover:text-white transition-colors">
+              </button>
+              <button
+                onClick={() => scrollToSection("blog")}
+                className="text-white/80 hover:text-white transition-colors"
+              >
                 Blog
-              </a>
-              <a href="#contact" className="text-white/80 hover:text-white transition-colors">
+              </button>
+              <Link href="/work-samples" className="text-white/80 hover:text-white transition-colors">
+                Work Samples
+              </Link>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="text-white/80 hover:text-white transition-colors"
+              >
                 Contact
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -280,28 +495,43 @@ export default function Portfolio() {
           <div className="floating-element absolute bottom-32 left-1/4 w-1 h-1 bg-[#fb6163] rounded-full opacity-80 animate-ping"></div>
         </div>
 
-        <div className="text-center z-10 max-w-4xl mx-auto px-4">
-          <h1 className="hero-title text-6xl md:text-8xl font-bold text-white mb-6 opacity-0 animate-fade-in-up">
-            Kejsan
-          </h1>
-          <p className="hero-subtitle text-2xl md:text-3xl text-[#fb6163] mb-8 opacity-0 animate-fade-in-up animation-delay-300">
-            Digital Marketing Specialist
-          </p>
-          <p className="hero-description text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto opacity-0 animate-fade-in-up animation-delay-600">
-            Driving organic growth through strategic SEO, compelling content, and data-driven marketing. Specialized in
-            scaling digital presence for tech companies and e-commerce brands.
-          </p>
-          <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in-up animation-delay-900">
-            <Button size="lg" className="bg-[#fb6163] hover:bg-[#fb6163]/90 text-white px-8 py-3">
-              View My Work
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/30 text-white hover:bg-white/10 px-8 py-3 bg-transparent"
-            >
-              Let's Connect
-            </Button>
+        <div className="grid md:grid-cols-2 gap-12 items-center z-10 max-w-6xl mx-auto px-4">
+          <div className="text-center md:text-left">
+            <h1 className="hero-title text-5xl md:text-7xl font-bold text-white mb-6 opacity-0">Kejsan</h1>
+            <p className="hero-subtitle text-xl md:text-2xl text-[#fb6163] mb-6 opacity-0">
+              Digital Marketing Specialist
+            </p>
+            <p className="hero-description text-lg text-white/80 mb-8 opacity-0">
+              Driving organic growth through strategic SEO, compelling content, and data-driven marketing. Specialized
+              in scaling digital presence for tech companies and e-commerce brands.
+            </p>
+            <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center md:justify-start opacity-0">
+              <Link href="/work-samples">
+                <Button size="lg" className="bg-[#fb6163] hover:bg-[#fb6163]/90 text-white px-8 py-3">
+                  View My Work
+                </Button>
+              </Link>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10 px-8 py-3 bg-transparent"
+                onClick={() => scrollToSection("contact")}
+              >
+                Let's Connect
+              </Button>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <div className="hero-image relative opacity-0">
+              <div className="w-80 h-80 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#fb6163] to-[#000080] rounded-full opacity-20 animate-pulse"></div>
+                <img
+                  src="/kejsan-profile.png"
+                  alt="Kejsan Çoku - Digital Marketing Specialist"
+                  className="relative z-10 w-full h-full object-cover rounded-full border-4 border-white/20"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -382,7 +612,7 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-white text-center mb-16">Professional Experience</h2>
           <div className="space-y-8">
-            {experiences.map((exp, index) => (
+            {displayedExperiences.map((exp, index) => (
               <Card
                 key={index}
                 className="experience-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer group"
@@ -395,8 +625,29 @@ export default function Portfolio() {
                         {exp.title}
                       </h3>
                       <p className="text-[#54a09b] text-lg">{exp.company}</p>
-                      {exp.previousRole && (
-                        <p className="text-[#fb6163] text-sm mt-1">↗ Promoted from {exp.previousRole.title}</p>
+                      {exp.careerProgression && (
+                        <div className="mt-2 space-y-1">
+                          {exp.careerProgression.map((role, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <div
+                                className={`w-2 h-2 rounded-full ${
+                                  role.type === "promotion"
+                                    ? "bg-[#fb6163]"
+                                    : role.type === "concurrent"
+                                      ? "bg-[#54a09b]"
+                                      : "bg-white/40"
+                                }`}
+                              ></div>
+                              <span className="text-white/70 text-sm">
+                                {role.title} ({role.period})
+                                {role.type === "promotion" && <span className="text-[#fb6163] ml-1">↗ Promoted</span>}
+                                {role.type === "concurrent" && (
+                                  <span className="text-[#54a09b] ml-1">• Concurrent Role</span>
+                                )}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
                     <div className="text-right">
@@ -427,6 +678,17 @@ export default function Portfolio() {
               </Card>
             ))}
           </div>
+
+          {!showAllExperiences && (
+            <div className="text-center mt-8">
+              <Button
+                onClick={() => setShowAllExperiences(true)}
+                className="bg-gradient-to-r from-[#54a09b] to-[#fb6163] hover:from-[#54a09b]/90 hover:to-[#fb6163]/90 text-white px-8 py-3"
+              >
+                See More Experiences ({allExperiences.length - 3} more)
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -467,14 +729,15 @@ export default function Portfolio() {
             ))}
           </div>
           <div className="text-center">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/30 text-white hover:bg-white/10 bg-transparent"
-              onClick={() => (window.location.href = "/blog")}
-            >
-              View All Articles
-            </Button>
+            <Link href="/blog">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10 bg-transparent"
+              >
+                View All Articles
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -512,14 +775,22 @@ export default function Portfolio() {
             growth-driven campaigns that deliver measurable results. Let's discuss your next project.
           </p>
           <div className="flex justify-center gap-6">
-            <Button size="lg" className="bg-[#fb6163] hover:bg-[#fb6163]/90 text-white">
-              <Mail className="w-5 h-5 mr-2" />
-              Get In Touch
-            </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-transparent">
-              <Linkedin className="w-5 h-5 mr-2" />
-              LinkedIn
-            </Button>
+            <a href="mailto:kejsan@example.com">
+              <Button size="lg" className="bg-[#fb6163] hover:bg-[#fb6163]/90 text-white">
+                <Mail className="w-5 h-5 mr-2" />
+                Get In Touch
+              </Button>
+            </a>
+            <a href="https://linkedin.com/in/kejsan" target="_blank" rel="noopener noreferrer">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10 bg-transparent"
+              >
+                <Linkedin className="w-5 h-5 mr-2" />
+                LinkedIn
+              </Button>
+            </a>
           </div>
         </div>
       </section>
@@ -561,17 +832,68 @@ export default function Portfolio() {
                 <p className="text-white/80 leading-relaxed">{selectedExperience.fullDescription}</p>
               </div>
 
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
-                <div className="space-y-3">
-                  {selectedExperience.responsibilities.map((responsibility, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-white/70 leading-relaxed">{responsibility}</p>
-                    </div>
-                  ))}
+              {selectedExperience.careerProgression ? (
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Career Progression & Responsibilities</h3>
+                  <div className="space-y-6">
+                    {selectedExperience.careerProgression.map((role, i) => (
+                      <div
+                        key={i}
+                        className={`p-4 rounded-lg border ${
+                          role.type === "promotion"
+                            ? "bg-[#fb6163]/10 border-[#fb6163]/20"
+                            : role.type === "concurrent"
+                              ? "bg-[#54a09b]/10 border-[#54a09b]/20"
+                              : "bg-white/5 border-white/10"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div
+                            className={`w-3 h-3 rounded-full ${
+                              role.type === "promotion"
+                                ? "bg-[#fb6163]"
+                                : role.type === "concurrent"
+                                  ? "bg-[#54a09b]"
+                                  : "bg-white/40"
+                            }`}
+                          ></div>
+                          <div>
+                            <h4 className="text-lg font-semibold text-white">{role.title}</h4>
+                            <p className="text-white/70 text-sm">{role.period}</p>
+                            {role.type === "promotion" && (
+                              <span className="text-[#fb6163] text-xs font-medium">↗ Promotion</span>
+                            )}
+                            {role.type === "concurrent" && (
+                              <span className="text-[#54a09b] text-xs font-medium">• Concurrent Role</span>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-white/80 mb-3">{role.description}</p>
+                        <div className="space-y-2">
+                          {role.responsibilities.map((responsibility, j) => (
+                            <div key={j} className="flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 bg-white/40 rounded-full mt-2 flex-shrink-0"></div>
+                              <p className="text-white/70 text-sm leading-relaxed">{responsibility}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
+                  <div className="space-y-3">
+                    {selectedExperience.responsibilities.map((responsibility, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
+                        <p className="text-white/70 leading-relaxed">{responsibility}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4">Skills & Technologies</h3>
@@ -591,10 +913,44 @@ export default function Portfolio() {
         </div>
       )}
 
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 bg-[#fb6163] hover:bg-[#fb6163]/90 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp className="w-6 h-6" />
+        </button>
+      )}
+
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-white/60">© 2024 Kejsan. Digital Marketing Specialist based in Tirana, Albania</p>
+          <div className="text-white/60">
+            &copy; 2025 Kejsan Çoku - All rights reserved. |{" "}
+            <a
+              href="https://linkedin.com/in/kejsan"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+            >
+              LinkedIn
+            </a>{" "}
+            |{" "}
+            <a
+              href="https://github.com/kejsan"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+            >
+              GitHub
+            </a>{" "}
+            |{" "}
+            <a href="mailto:kejsan@example.com" className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors">
+              Email
+            </a>
+          </div>
         </div>
       </footer>
     </div>
@@ -631,35 +987,5 @@ const blogPosts = [
     readTime: "10 min read",
     date: "Dec 5, 2024",
     image: "/podcast-studio-setup.png",
-  },
-  {
-    slug: "ecommerce-seo-category-optimization",
-    title: "E-commerce SEO: Optimizing 3000+ Category Pages That Actually Convert",
-    excerpt:
-      "Lessons learned from optimizing thousands of e-commerce category pages. Technical strategies, content frameworks, and performance metrics that matter.",
-    category: "E-commerce SEO",
-    readTime: "12 min read",
-    date: "Nov 28, 2024",
-    image: "/ecommerce-category-optimization.png",
-  },
-  {
-    slug: "linkedin-newsletter-growth-strategy",
-    title: "From 0 to 3200+ Subscribers: My LinkedIn Newsletter Growth Strategy",
-    excerpt:
-      "The exact strategy I used to grow a LinkedIn newsletter from zero to over 3200 subscribers in just two editions. Content planning, distribution, and engagement tactics.",
-    category: "Social Media",
-    readTime: "7 min read",
-    date: "Nov 20, 2024",
-    image: "/linkedin-newsletter-growth.png",
-  },
-  {
-    slug: "website-migration-seo-checklist",
-    title: "Website Migration Without Losing Rankings: A Complete SEO Checklist",
-    excerpt:
-      "How I managed a complete website redesign and migration at Cardo AI without losing any search rankings. Step-by-step process and critical checkpoints.",
-    category: "Technical SEO",
-    readTime: "9 min read",
-    date: "Nov 15, 2024",
-    image: "/website-migration-seo.png",
   },
 ]
