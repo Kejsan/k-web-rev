@@ -15,7 +15,7 @@ export default function BlogPage() {
     // Load anime.js dynamically
     const loadAnime = async () => {
       try {
-        const anime = (await import("animejs")).default
+        const anime = (await import("animejs")).default as any
 
         anime({
           targets: ".blog-header",

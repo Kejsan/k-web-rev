@@ -13,7 +13,7 @@ export default function WorkSamples() {
     // Load anime.js dynamically
     const loadAnime = async () => {
       try {
-        const anime = (await import("animejs")).default
+        const anime = (await import("animejs")).default as any
 
         anime({
           targets: ".work-header",
@@ -213,7 +213,7 @@ export default function WorkSamples() {
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Work Samples</h1>
             <p className="text-xl text-white/80 mb-8 max-w-3xl mx-auto">
               A showcase of my digital marketing work across various companies and platforms. From social media growth
-              to content creation, here's a comprehensive look at my professional contributions.
+                to content creation, here&apos;s a comprehensive look at my professional contributions.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
               <div className="text-center">
@@ -290,7 +290,7 @@ export default function WorkSamples() {
                           : "Managed Social Media Channels"}
                       </h3>
                       <div className="grid md:grid-cols-2 gap-4">
-                        {sample.socialChannels.map((channel, i) => (
+                          {sample.socialChannels.map((channel: any, i: number) => (
                           <div key={i} className="bg-white/5 rounded-lg p-4 border border-white/10">
                             <div className="flex items-center justify-between mb-2">
                               <h4 className="font-semibold text-white">{channel.platform}</h4>
@@ -303,7 +303,9 @@ export default function WorkSamples() {
                                 <ExternalLink className="w-4 h-4" />
                               </a>
                             </div>
-                            {channel.description && <p className="text-white/70 text-sm mb-3">{channel.description}</p>}
+                              {"description" in channel && (
+                                <p className="text-white/70 text-sm mb-3">{channel.description}</p>
+                              )}
                             <a
                               href={channel.url}
                               target="_blank"
@@ -341,7 +343,7 @@ export default function WorkSamples() {
                       {sample.id === "cardo-ai" && (
                         <p className="text-white/60 text-sm mt-4 italic">
                           These content pieces are among the articles I wrote. Authorship can be verified by contacting
-                          Cardo AI's HR department.
+                            Cardo AI&apos;s HR department.
                         </p>
                       )}
                     </div>
@@ -364,7 +366,7 @@ export default function WorkSamples() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Interested in Working Together?</h2>
             <p className="text-white/80 text-lg mb-8">
-              These samples represent just a portion of my work. I'd love to discuss how I can help grow your digital
+                These samples represent just a portion of my work. I&apos;d love to discuss how I can help grow your digital
               presence.
             </p>
             <div className="flex justify-center gap-6">
