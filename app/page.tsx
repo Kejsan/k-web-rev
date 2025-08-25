@@ -698,34 +698,32 @@ export default function Portfolio() {
           <h2 className="text-4xl font-bold text-white text-center mb-16">Latest Insights</h2>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {blogPosts.slice(0, 3).map((post, index) => (
-              <Card
-                key={post.slug}
-                className="blog-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
-                onClick={() => (window.location.href = `/blog/${post.slug}`)}
-              >
-                <div className="aspect-video overflow-hidden rounded-t-lg">
-                  <img
-                    src={post.image || "/placeholder.svg"}
-                    alt={post.title}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[#fb6163] text-sm">{post.category}</span>
-                    <span className="text-white/40">•</span>
-                    <span className="text-white/60 text-sm">{post.readTime}</span>
+              <Link key={post.slug} href={`/blog/${post.slug}`}>
+                <Card className="blog-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
+                  <div className="aspect-video overflow-hidden rounded-t-lg">
+                    <img
+                      src={post.image || "/placeholder.svg"}
+                      alt={post.title}
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2">{post.title}</h3>
-                  <p className="text-white/70 mb-4 line-clamp-3">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/60 text-sm">{post.date}</span>
-                    <Button size="sm" variant="ghost" className="text-[#fb6163] hover:text-[#fb6163]/80">
-                      Read More →
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[#fb6163] text-sm">{post.category}</span>
+                      <span className="text-white/40">•</span>
+                      <span className="text-white/60 text-sm">{post.readTime}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2">{post.title}</h3>
+                    <p className="text-white/70 mb-4 line-clamp-3">{post.excerpt}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/60 text-sm">{post.date}</span>
+                      <Button size="sm" variant="ghost" className="text-[#fb6163] hover:text-[#fb6163]/80">
+                        Read More →
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
           <div className="text-center">
