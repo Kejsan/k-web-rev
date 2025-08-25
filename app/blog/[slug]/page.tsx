@@ -523,13 +523,14 @@ The key to scaling content marketing for AI companies isn't just creating more c
                     </div>
                   </div>
                   <div className="mt-4">
-                    <Button
-                      variant="outline"
-                      className="border-white/30 text-white hover:bg-white/10 bg-transparent"
-                      onClick={() => (window.location.href = "/blog")}
-                    >
-                      View All Articles →
-                    </Button>
+                    <Link href="/blog">
+                      <Button
+                        variant="outline"
+                        className="border-white/30 text-white hover:bg-white/10 bg-transparent"
+                      >
+                        View All Articles →
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

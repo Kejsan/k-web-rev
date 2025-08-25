@@ -221,42 +221,40 @@ export default function BlogPage() {
               {blogPosts
                 .filter((post) => post.featured)
                 .map((post, index) => (
-                  <Card
-                    key={post.slug}
-                    className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
-                    onClick={() => (window.location.href = `/blog/${post.slug}`)}
-                  >
-                    <div className="aspect-video overflow-hidden rounded-t-lg">
-                      <img
-                        src={post.image || "/placeholder.svg"}
-                        alt={post.title}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                      />
-                    </div>
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="secondary" className="bg-[#54a09b]/20 text-[#54a09b]">
-                          {post.category}
-                        </Badge>
-                        <span className="text-white/40">•</span>
-                        <div className="flex items-center gap-1 text-white/60 text-sm">
-                          <Clock className="w-4 h-4" />
-                          {post.readTime}
-                        </div>
+                  <Link key={post.slug} href={`/blog/${post.slug}`}>
+                    <Card className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
+                      <div className="aspect-video overflow-hidden rounded-t-lg">
+                        <img
+                          src={post.image || "/placeholder.svg"}
+                          alt={post.title}
+                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        />
                       </div>
-                      <h3 className="text-2xl font-semibold text-white mb-3">{post.title}</h3>
-                      <p className="text-white/70 mb-4">{post.excerpt}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-white/60 text-sm">
-                          <Calendar className="w-4 h-4" />
-                          {post.date}
+                      <CardContent className="p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge variant="secondary" className="bg-[#54a09b]/20 text-[#54a09b]">
+                            {post.category}
+                          </Badge>
+                          <span className="text-white/40">•</span>
+                          <div className="flex items-center gap-1 text-white/60 text-sm">
+                            <Clock className="w-4 h-4" />
+                            {post.readTime}
+                          </div>
                         </div>
-                        <Button size="sm" variant="ghost" className="text-[#54a09b] hover:text-[#54a09b]/80">
-                          Read More →
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <h3 className="text-2xl font-semibold text-white mb-3">{post.title}</h3>
+                        <p className="text-white/70 mb-4">{post.excerpt}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1 text-white/60 text-sm">
+                            <Calendar className="w-4 h-4" />
+                            {post.date}
+                          </div>
+                          <Button size="sm" variant="ghost" className="text-[#54a09b] hover:text-[#54a09b]/80">
+                            Read More →
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
             </div>
           </div>
@@ -268,11 +266,8 @@ export default function BlogPage() {
             <h2 className="text-3xl font-bold text-white mb-8">All Articles</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogPosts.map((post, index) => (
-                <Card
-                  key={post.slug}
-                  className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer"
-                  onClick={() => (window.location.href = `/blog/${post.slug}`)}
-                >
+                <Link key={post.slug} href={`/blog/${post.slug}`}>
+                  <Card className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
                   <div className="aspect-video overflow-hidden rounded-t-lg">
                     <img
                       src={post.image || "/placeholder.svg"}
@@ -304,6 +299,7 @@ export default function BlogPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </Link>
               ))}
             </div>
           </div>
