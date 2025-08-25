@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Search, Calendar, Clock } from "lucide-react"
 import Link from "next/link"
 import NewsletterSignup from "@/components/newsletter-signup"
+import Image from "next/image"
 
 export default function BlogPage() {
   const blogRef = useRef<HTMLDivElement>(null)
@@ -224,9 +225,11 @@ export default function BlogPage() {
                   <Link key={post.slug} href={`/blog/${post.slug}`}>
                     <Card className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
                       <div className="aspect-video overflow-hidden rounded-t-lg">
-                        <img
+                        <Image
                           src={post.image || "/placeholder.svg"}
                           alt={post.title}
+                          width={1200}
+                          height={675}
                           className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                         />
                       </div>
@@ -269,9 +272,11 @@ export default function BlogPage() {
                 <Link key={post.slug} href={`/blog/${post.slug}`}>
                   <Card className="blog-post-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
                   <div className="aspect-video overflow-hidden rounded-t-lg">
-                    <img
+                    <Image
                       src={post.image || "/placeholder.svg"}
                       alt={post.title}
+                      width={1200}
+                      height={675}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                     />
                   </div>
