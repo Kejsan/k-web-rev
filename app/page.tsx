@@ -19,7 +19,7 @@ export default function Portfolio() {
     // Load anime.js dynamically
     const loadAnime = async () => {
       try {
-        const anime = (await import("animejs")).default
+        const anime = (await import("animejs")).default as any
 
         // Hero animations
         anime
@@ -517,7 +517,7 @@ export default function Portfolio() {
                 className="border-white/30 text-white hover:bg-white/10 px-8 py-3 bg-transparent"
                 onClick={() => scrollToSection("contact")}
               >
-                Let's Connect
+                Let&apos;s Connect
               </Button>
             </div>
           </div>
@@ -543,13 +543,13 @@ export default function Portfolio() {
             <div>
               <h2 className="text-4xl font-bold text-white mb-6">About Me</h2>
               <p className="text-white/80 text-lg mb-6">
-                I'm a results-driven Digital Marketing Specialist with 5+ years of experience helping brands scale their
+                I&apos;m a results-driven Digital Marketing Specialist with 5+ years of experience helping brands scale their
                 digital presence. Currently at Division5, I manage end-to-end digital marketing strategies, from SEO
                 optimization to podcast production.
               </p>
               <p className="text-white/80 text-lg mb-8">
                 My expertise spans technical SEO, content strategy, social media marketing, and affiliate marketing.
-                I've successfully managed campaigns for AI companies, e-commerce brands, and tech startups, consistently
+                I&apos;ve successfully managed campaigns for AI companies, e-commerce brands, and tech startups, consistently
                 delivering measurable growth in organic traffic and engagement.
               </p>
               <div className="grid grid-cols-3 gap-6">
@@ -769,10 +769,10 @@ export default function Portfolio() {
       {/* Contact Section */}
       <section id="contact" className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-8">Let's Grow Your Digital Presence</h2>
+            <h2 className="text-4xl font-bold text-white mb-8">Let&apos;s Grow Your Digital Presence</h2>
           <p className="text-white/80 text-lg mb-12">
-            Ready to scale your brand's digital presence? I specialize in SEO strategy, content marketing, and
-            growth-driven campaigns that deliver measurable results. Let's discuss your next project.
+              Ready to scale your brand&apos;s digital presence? I specialize in SEO strategy, content marketing, and
+              growth-driven campaigns that deliver measurable results. Let&apos;s discuss your next project.
           </p>
           <div className="flex justify-center gap-6">
             <a href="mailto:kejsan@example.com">
@@ -836,7 +836,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Career Progression & Responsibilities</h3>
                   <div className="space-y-6">
-                    {selectedExperience.careerProgression.map((role, i) => (
+                    {selectedExperience.careerProgression.map((role: any, i: number) => (
                       <div
                         key={i}
                         className={`p-4 rounded-lg border ${
@@ -870,7 +870,7 @@ export default function Portfolio() {
                         </div>
                         <p className="text-white/80 mb-3">{role.description}</p>
                         <div className="space-y-2">
-                          {role.responsibilities.map((responsibility, j) => (
+                          {role.responsibilities.map((responsibility: any, j: number) => (
                             <div key={j} className="flex items-start gap-2">
                               <div className="w-1.5 h-1.5 bg-white/40 rounded-full mt-2 flex-shrink-0"></div>
                               <p className="text-white/70 text-sm leading-relaxed">{responsibility}</p>
@@ -885,7 +885,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
                   <div className="space-y-3">
-                    {selectedExperience.responsibilities.map((responsibility, i) => (
+                    {selectedExperience.responsibilities.map((responsibility: any, i: number) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
                         <p className="text-white/70 leading-relaxed">{responsibility}</p>
@@ -898,7 +898,7 @@ export default function Portfolio() {
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4">Skills & Technologies</h3>
                 <div className="flex flex-wrap gap-2">
-                  {selectedExperience.skills.map((skill, i) => (
+                  {selectedExperience.skills.map((skill: any, i: number) => (
                     <span
                       key={i}
                       className="bg-gradient-to-r from-[#54a09b]/20 to-[#fb6163]/20 border border-[#54a09b]/30 text-white px-3 py-1 rounded-full text-sm"
