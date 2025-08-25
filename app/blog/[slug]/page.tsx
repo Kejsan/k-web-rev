@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, Clock, Share2, Linkedin, Twitter } from "lucide-react"
 import Link from "next/link"
 import NewsletterSignup from "@/components/newsletter-signup"
+import Image from "next/image"
 
 export default function BlogPost() {
   const params = useParams()
@@ -443,9 +444,11 @@ The key to scaling content marketing for AI companies isn't just creating more c
             </div>
 
             <div className="aspect-video overflow-hidden rounded-lg mb-8">
-              <img
+              <Image
                 src={currentPost.image || "/placeholder.svg"}
                 alt={currentPost.title}
+                width={1200}
+                height={675}
                 className="w-full h-full object-cover"
               />
             </div>

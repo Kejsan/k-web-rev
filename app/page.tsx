@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Linkedin, Mail, Search, TrendingUp, Users, Podcast, BarChart3, PenTool, X, ChevronUp } from "lucide-react"
 import Link from "next/link"
 import type { Experience } from "@/types/experience"
+import Image from "next/image"
 
 export default function Portfolio() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -526,9 +527,11 @@ export default function Portfolio() {
             <div className="hero-image relative opacity-0">
               <div className="w-80 h-80 relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#fb6163] to-[#000080] rounded-full opacity-20 animate-pulse"></div>
-                <img
+                <Image
                   src="/kejsan-profile.png"
                   alt="Kejsan Çoku - Digital Marketing Specialist"
+                  width={320}
+                  height={320}
                   className="relative z-10 w-full h-full object-cover rounded-full border-4 border-white/20"
                 />
               </div>
@@ -702,9 +705,11 @@ export default function Portfolio() {
               <Link key={post.slug} href={`/blog/${post.slug}`}>
                 <Card className="blog-card bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 cursor-pointer">
                   <div className="aspect-video overflow-hidden rounded-t-lg">
-                    <img
+                    <Image
                       src={post.image || "/placeholder.svg"}
                       alt={post.title}
+                      width={1200}
+                      height={675}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                     />
                   </div>
@@ -884,7 +889,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
                   <div className="space-y-3">
-                    {selectedExperience.responsibilities.map((responsibility, i) => (
+                    {selectedExperience.responsibilities?.map((responsibility, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
                         <p className="text-white/70 leading-relaxed">{responsibility}</p>
