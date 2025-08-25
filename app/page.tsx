@@ -889,7 +889,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
                   <div className="space-y-3">
-                    {selectedExperience.responsibilities.map((responsibility, i) => (
+                    {selectedExperience.responsibilities?.map((responsibility, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
                         <p className="text-white/70 leading-relaxed">{responsibility}</p>
