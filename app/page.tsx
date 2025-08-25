@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Linkedin, Mail, Search, TrendingUp, Users, Podcast, BarChart3, PenTool, X, ChevronUp } from "lucide-react"
 import Link from "next/link"
+import type { Experience } from "@/types/experience"
 
 export default function Portfolio() {
   const heroRef = useRef<HTMLDivElement>(null)
   const skillsRef = useRef<HTMLDivElement>(null)
   const experienceRef = useRef<HTMLDivElement>(null)
   const blogRef = useRef<HTMLDivElement>(null)
-  const [selectedExperience, setSelectedExperience] = useState<any>(null)
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null)
   const [showAllExperiences, setShowAllExperiences] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
 
@@ -169,7 +170,7 @@ export default function Portfolio() {
     { name: "Growth Marketing", level: 87, icon: <TrendingUp className="w-8 h-8 text-[#fb6163]" /> },
   ]
 
-  const allExperiences = [
+  const allExperiences: Experience[] = [
     {
       id: "division5",
       title: "Digital Marketing Specialist",
@@ -834,7 +835,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Career Progression & Responsibilities</h3>
                   <div className="space-y-6">
-                    {selectedExperience.careerProgression.map((role: any, i: number) => (
+                    {selectedExperience.careerProgression.map((role, i) => (
                       <div
                         key={i}
                         className={`p-4 rounded-lg border ${
@@ -868,7 +869,7 @@ export default function Portfolio() {
                         </div>
                         <p className="text-white/80 mb-3">{role.description}</p>
                         <div className="space-y-2">
-                          {role.responsibilities.map((responsibility: any, j: number) => (
+                          {role.responsibilities.map((responsibility, j) => (
                             <div key={j} className="flex items-start gap-2">
                               <div className="w-1.5 h-1.5 bg-white/40 rounded-full mt-2 flex-shrink-0"></div>
                               <p className="text-white/70 text-sm leading-relaxed">{responsibility}</p>
@@ -883,7 +884,7 @@ export default function Portfolio() {
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-white mb-4">Key Responsibilities & Impact</h3>
                   <div className="space-y-3">
-                    {selectedExperience.responsibilities.map((responsibility: any, i: number) => (
+                    {selectedExperience.responsibilities.map((responsibility, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-[#fb6163] rounded-full mt-2 flex-shrink-0"></div>
                         <p className="text-white/70 leading-relaxed">{responsibility}</p>
@@ -896,7 +897,7 @@ export default function Portfolio() {
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4">Skills & Technologies</h3>
                 <div className="flex flex-wrap gap-2">
-                  {selectedExperience.skills.map((skill: any, i: number) => (
+                  {selectedExperience.skills.map((skill, i) => (
                     <span
                       key={i}
                       className="bg-gradient-to-r from-[#54a09b]/20 to-[#fb6163]/20 border border-[#54a09b]/30 text-white px-3 py-1 rounded-full text-sm"
