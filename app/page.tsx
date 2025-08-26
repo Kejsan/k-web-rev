@@ -15,7 +15,6 @@ import ContactSection from "@/components/sections/contact-section"
 export default function Portfolio() {
   const skillsRef = useRef<HTMLDivElement>(null)
   const experienceRef = useRef<HTMLDivElement>(null)
-  const blogRef = useRef<HTMLDivElement>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
 
   useEffect(() => {
@@ -126,7 +125,6 @@ export default function Portfolio() {
 
         if (skillsRef.current) observer.observe(skillsRef.current)
         if (experienceRef.current) observer.observe(experienceRef.current)
-        if (blogRef.current) observer.observe(blogRef.current)
 
         return () => observer.disconnect()
       } catch (error) {
@@ -217,7 +215,7 @@ export default function Portfolio() {
 
       <ExperienceSection ref={experienceRef} />
 
-      <BlogSection ref={blogRef} />
+      <BlogSection />
 
       <NewsletterSection />
 
