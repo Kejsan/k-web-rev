@@ -3,8 +3,17 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ExternalLink, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
+type WebApp = {
+  id: number
+  title: string
+  description: string
+  url: string
+}
+
 export default async function AiToolsPage() {
-  const apps = await prisma.webApp.findMany({ orderBy: { id: 'asc' } })
+  const apps = (await prisma.webApp.findMany({
+    orderBy: { id: 'asc' },
+  })) as WebApp[]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000080] to-[#fb6163] text-white py-12">
