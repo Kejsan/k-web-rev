@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
+const { PrismaClient } = eval('require')('@prisma/client') as any
 const prisma = new PrismaClient()
 
 async function main() {
