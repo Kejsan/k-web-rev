@@ -9,9 +9,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model WebApp {
-  id          Int    @id @default(autoincrement())
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Experience {
+  id          Int      @id @default(autoincrement())
+  company     String
+  role        String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WorkSample {
+  id          Int      @id @default(autoincrement())
   title       String
-  description String
-  url         String
+  url         String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WebApp {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  url         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
