@@ -8,6 +8,7 @@ import Link from "next/link"
 
 export default function WorkSamples() {
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [footer, setFooter] = useState<any>(null)
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -49,6 +50,12 @@ export default function WorkSamples() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/footer')
+      .then((res) => res.json())
+      .then((data) => setFooter(data))
   }, [])
 
   const scrollToTop = () => {
@@ -403,30 +410,48 @@ export default function WorkSamples() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="text-white/60">
-            &copy; 2025 Kejsan Çoku - All rights reserved. |{" "}
-            <a
-              href="https://linkedin.com/in/kejsan"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
-            >
-              LinkedIn
-            </a>{" "}
-            |{" "}
-            <a
-              href="https://github.com/kejsan"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
-            >
-              GitHub
-            </a>{" "}
-            |{" "}
-            <a href="mailto:kejsan@example.com" className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors">
-              Email
-            </a>
-          </div>
+          {footer && (
+            <div className="text-white/60">
+              {footer.copyright}
+              {footer.linkedin && (
+                <>
+                  {" "}|{" "}
+                  <a
+                    href={footer.linkedin}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                  >
+                    LinkedIn
+                  </a>
+                </>
+              )}
+              {footer.github && (
+                <>
+                  {" "}|{" "}
+                  <a
+                    href={footer.github}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </>
+              )}
+              {footer.email && (
+                <>
+                  {" "}|{" "}
+                  <a
+                    href={`mailto:${footer.email}`}
+                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                  >
+                    Email
+                  </a>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </footer>
     </div>
