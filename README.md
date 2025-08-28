@@ -37,3 +37,5 @@ This project uses [NextAuth](https://next-auth.js.org/) with GitHub OAuth for th
 - `NEXTAUTH_URL` – the base URL of your deployment.
 - `NEXTAUTH_SECRET` – random string used to sign session tokens.
 - `ADMIN_EMAILS` – comma separated list of GitHub email addresses allowed to access `/admin` and related API routes.
+
+The admin dashboard lives at `/admin` and provides links to manage posts, experiences, apps, work samples, and the site footer.
