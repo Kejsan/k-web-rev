@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 interface WebApp {
@@ -11,6 +12,7 @@ interface WebApp {
 }
 
 export default function AppsPage() {
+  const router = useRouter()
   const [apps, setApps] = useState<WebApp[]>([])
   const [name, setName] = useState("")
   const [url, setUrl] = useState("")
@@ -18,6 +20,10 @@ export default function AppsPage() {
 
   async function fetchApps() {
     const res = await fetch("/api/apps")
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/apps")
+      return
+    }
     const data = await res.json()
     setApps(data)
   }
@@ -28,11 +34,15 @@ export default function AppsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/apps", {
+    const res = await fetch("/api/apps", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, url, description }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/apps")
+      return
+    }
     setName("")
     setUrl("")
     setDescription("")
@@ -40,7 +50,11 @@ export default function AppsPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/apps/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/apps/${id}`, { method: "DELETE" })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/apps")
+      return
+    }
     fetchApps()
   }
 
@@ -49,11 +63,15 @@ export default function AppsPage() {
     if (newName === null) return
     const newUrl = prompt("URL", app.url || "") || undefined
     const newDesc = prompt("Description", app.description || "") || undefined
-    await fetch(`/api/apps/${app.id}`, {
+    const res = await fetch(`/api/apps/${app.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: newName, url: newUrl, description: newDesc }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/apps")
+      return
+    }
     fetchApps()
   }
 

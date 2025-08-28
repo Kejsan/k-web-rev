@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 interface Post {
@@ -10,12 +11,17 @@ interface Post {
 }
 
 export default function PostsPage() {
+  const router = useRouter()
   const [posts, setPosts] = useState<Post[]>([])
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
 
   async function fetchPosts() {
     const res = await fetch("/api/posts")
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/posts")
+      return
+    }
     const data = await res.json()
     setPosts(data)
   }
@@ -26,18 +32,26 @@ export default function PostsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, content }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/posts")
+      return
+    }
     setTitle("")
     setContent("")
     fetchPosts()
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/posts/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/posts/${id}`, { method: "DELETE" })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/posts")
+      return
+    }
     fetchPosts()
   }
 
@@ -45,11 +59,15 @@ export default function PostsPage() {
     const newTitle = prompt("Title", post.title)
     if (newTitle === null) return
     const newContent = prompt("Content", post.content || "")
-    await fetch(`/api/posts/${post.id}`, {
+    const res = await fetch(`/api/posts/${post.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, content: newContent }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/posts")
+      return
+    }
     fetchPosts()
   }
 
