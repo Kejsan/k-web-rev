@@ -1,36 +1,15 @@
-"use client"
+import { ReactNode } from "react"
+import { redirect } from "next/navigation"
+import { SessionProvider } from "next-auth/react"
 
-import { ReactNode, useEffect } from "react"
-import { SessionProvider, useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import AdminNav from "./nav"
 
-function AuthGuard({ children }: { children: ReactNode }) {
-  const { status } = useSession()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/api/auth/signin?callbackUrl=/admin")
-    }
-  }, [status, router])
-
-  if (status === "loading") {
-    return <p>Loading...</p>
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const session = await getAdminSession()
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/admin")
   }
 
-  return <>{children}</>
-}
-
-export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <SessionProvider>
-      <AuthGuard>
-        <div className="flex">
-          <AdminNav />
-          <div className="flex-1">{children}</div>
-        </div>
-      </AuthGuard>
     </SessionProvider>
   )
 }

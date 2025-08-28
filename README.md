@@ -28,3 +28,14 @@ Continue building your app on:
 2. Deploy your chats from the v0 interface
 3. Changes are automatically pushed to this repository
 4. Vercel deploys the latest version from this repository
+
+## Authentication setup
+
+This project uses [NextAuth](https://next-auth.js.org/) with GitHub OAuth for the admin section. Configure the following environment variables:
+
+- `GITHUB_ID` and `GITHUB_SECRET` – credentials for your GitHub OAuth app.
+- `NEXTAUTH_URL` – the base URL of your deployment.
+- `NEXTAUTH_SECRET` – random string used to sign session tokens.
+- `ADMIN_EMAILS` – comma separated list of GitHub email addresses allowed to access `/admin` and related API routes.
+
+The admin dashboard lives at `/admin` and provides links to manage posts, experiences, apps, work samples, and the site footer.
