@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from "react"
 import { SessionProvider, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import AdminNav from "./nav"
 
 function AuthGuard({ children }: { children: ReactNode }) {
   const { status } = useSession()
@@ -24,7 +25,12 @@ function AuthGuard({ children }: { children: ReactNode }) {
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
-      <AuthGuard>{children}</AuthGuard>
+      <AuthGuard>
+        <div className="flex">
+          <AdminNav />
+          <div className="flex-1">{children}</div>
+        </div>
+      </AuthGuard>
     </SessionProvider>
   )
 }
