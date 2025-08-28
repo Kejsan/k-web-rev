@@ -43,3 +43,14 @@ model WebApp {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Footer {
+  id        Int      @id @default(autoincrement())
+  copyright String?
+  linkedin  String?
+  github    String?
+  twitter   String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
