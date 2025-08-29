@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
-interface Footer {
+interface SiteSettings {
   id?: number
   copyright?: string
   linkedin?: string
@@ -13,15 +13,15 @@ interface Footer {
 }
 
 export default function FooterPage() {
-  const [data, setData] = useState<Footer>({})
+  const [data, setData] = useState<SiteSettings>({})
 
   useEffect(() => {
-    const fetchFooter = async () => {
+    const fetchSettings = async () => {
       const res = await fetch("/api/footer")
       const json = await res.json()
       if (json) setData(json)
     }
-    fetchFooter()
+    fetchSettings()
   }, [])
 
   const handleChange = (

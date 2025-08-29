@@ -44,7 +44,7 @@ model WebApp {
   updatedAt   DateTime @updatedAt
 }
 
-model Footer {
+model SiteSettings {
   id        Int      @id @default(autoincrement())
   copyright String?
   linkedin  String?
