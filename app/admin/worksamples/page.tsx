@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 interface WorkSample {
@@ -11,28 +12,37 @@ interface WorkSample {
 }
 
 export default function WorkSamplesPage() {
+  const router = useRouter()
   const [samples, setSamples] = useState<WorkSample[]>([])
   const [title, setTitle] = useState("")
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
 
-  async function fetchSamples() {
+  const fetchSamples = useCallback(async () => {
     const res = await fetch("/api/worksamples")
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/worksamples")
+      return
+    }
     const data = await res.json()
     setSamples(data)
-  }
+  }, [router])
 
   useEffect(() => {
     fetchSamples()
-  }, [])
+  }, [fetchSamples])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/worksamples", {
+    const res = await fetch("/api/worksamples", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, url, description }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/worksamples")
+      return
+    }
     setTitle("")
     setUrl("")
     setDescription("")
@@ -40,7 +50,11 @@ export default function WorkSamplesPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/worksamples/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/worksamples/${id}`, { method: "DELETE" })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/worksamples")
+      return
+    }
     fetchSamples()
   }
 
@@ -49,11 +63,15 @@ export default function WorkSamplesPage() {
     if (newTitle === null) return
     const newUrl = prompt("URL", sample.url || "") || undefined
     const newDesc = prompt("Description", sample.description || "") || undefined
-    await fetch(`/api/worksamples/${sample.id}`, {
+    const res = await fetch(`/api/worksamples/${sample.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, url: newUrl, description: newDesc }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/worksamples")
+      return
+    }
     fetchSamples()
   }
 
