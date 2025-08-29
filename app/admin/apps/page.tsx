@@ -16,8 +16,17 @@ export default function AppsPage() {
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
 
+  function handleUnauthorized(res: Response) {
+    if (res.status === 401) {
+      window.location.href = "/api/auth/signin"
+      return true
+    }
+    return false
+  }
+
   async function fetchApps() {
     const res = await fetch("/api/apps")
+    if (handleUnauthorized(res)) return
     const data = await res.json()
     setApps(data)
   }
@@ -28,11 +37,12 @@ export default function AppsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/apps", {
+    const res = await fetch("/api/apps", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, url, description }),
     })
+    if (handleUnauthorized(res)) return
     setName("")
     setUrl("")
     setDescription("")
@@ -40,7 +50,8 @@ export default function AppsPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/apps/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/apps/${id}`, { method: "DELETE" })
+    if (handleUnauthorized(res)) return
     fetchApps()
   }
 
@@ -49,11 +60,12 @@ export default function AppsPage() {
     if (newName === null) return
     const newUrl = prompt("URL", app.url || "") || undefined
     const newDesc = prompt("Description", app.description || "") || undefined
-    await fetch(`/api/apps/${app.id}`, {
+    const res = await fetch(`/api/apps/${app.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: newName, url: newUrl, description: newDesc }),
     })
+    if (handleUnauthorized(res)) return
     fetchApps()
   }
 

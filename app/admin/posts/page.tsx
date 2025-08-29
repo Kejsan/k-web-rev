@@ -14,8 +14,17 @@ export default function PostsPage() {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
 
+  function handleUnauthorized(res: Response) {
+    if (res.status === 401) {
+      window.location.href = "/api/auth/signin"
+      return true
+    }
+    return false
+  }
+
   async function fetchPosts() {
     const res = await fetch("/api/posts")
+    if (handleUnauthorized(res)) return
     const data = await res.json()
     setPosts(data)
   }
@@ -26,18 +35,20 @@ export default function PostsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, content }),
     })
+    if (handleUnauthorized(res)) return
     setTitle("")
     setContent("")
     fetchPosts()
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/posts/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/posts/${id}`, { method: "DELETE" })
+    if (handleUnauthorized(res)) return
     fetchPosts()
   }
 
@@ -45,11 +56,12 @@ export default function PostsPage() {
     const newTitle = prompt("Title", post.title)
     if (newTitle === null) return
     const newContent = prompt("Content", post.content || "")
-    await fetch(`/api/posts/${post.id}`, {
+    const res = await fetch(`/api/posts/${post.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, content: newContent }),
     })
+    if (handleUnauthorized(res)) return
     fetchPosts()
   }
 
