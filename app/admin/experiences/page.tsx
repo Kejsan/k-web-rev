@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 interface Experience {
@@ -13,6 +14,7 @@ interface Experience {
 }
 
 export default function ExperiencesPage() {
+  const router = useRouter()
   const [experiences, setExperiences] = useState<Experience[]>([])
   const [company, setCompany] = useState("")
   const [role, setRole] = useState("")
@@ -20,23 +22,31 @@ export default function ExperiencesPage() {
   const [endDate, setEndDate] = useState("")
   const [description, setDescription] = useState("")
 
-  async function fetchExperiences() {
+  const fetchExperiences = useCallback(async () => {
     const res = await fetch("/api/experiences")
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/experiences")
+      return
+    }
     const data = await res.json()
     setExperiences(data)
-  }
+  }, [router])
 
   useEffect(() => {
     fetchExperiences()
-  }, [])
+  }, [fetchExperiences])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/experiences", {
+    const res = await fetch("/api/experiences", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ company, role, startDate, endDate, description }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/experiences")
+      return
+    }
     setCompany("")
     setRole("")
     setStartDate("")
@@ -46,7 +56,11 @@ export default function ExperiencesPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/experiences/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/experiences/${id}`, { method: "DELETE" })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/experiences")
+      return
+    }
     fetchExperiences()
   }
 
@@ -57,7 +71,7 @@ export default function ExperiencesPage() {
     const newStart = prompt("Start Date", exp.startDate) || ""
     const newEnd = prompt("End Date", exp.endDate || "") || undefined
     const newDesc = prompt("Description", exp.description || "") || undefined
-    await fetch(`/api/experiences/${exp.id}`, {
+    const res = await fetch(`/api/experiences/${exp.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -68,6 +82,10 @@ export default function ExperiencesPage() {
         description: newDesc,
       }),
     })
+    if (res.status === 401) {
+      router.push("/api/auth/signin?callbackUrl=/admin/experiences")
+      return
+    }
     fetchExperiences()
   }
 
