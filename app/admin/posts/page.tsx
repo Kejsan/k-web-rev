@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { EditDialog } from "@/components/admin/edit-dialog"
@@ -25,24 +25,24 @@ export default function PostsPage() {
   const [editingPost, setEditingPost] = useState<Post | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  function handleUnauthorized(res: Response) {
+  const handleUnauthorized = useCallback((res: Response) => {
     if (res.status === 401) {
       window.location.href = "/api/auth/signin"
       return true
     }
     return false
-  }
+  }, [])
 
-  async function fetchPosts() {
+  const fetchPosts = useCallback(async () => {
     const res = await fetch("/api/posts")
     if (handleUnauthorized(res)) return
     const data = await res.json()
     setPosts(data)
-  }
+  }, [handleUnauthorized])
 
   useEffect(() => {
     fetchPosts()
-  }, [])
+  }, [fetchPosts])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

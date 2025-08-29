@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useForm, UseFormReturn } from "react-hook-form"
+import { useForm, UseFormReturn, FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ZodSchema } from "zod"
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
-interface EditDialogProps<T> {
+interface EditDialogProps<T extends FieldValues> {
   title: string
   schema: ZodSchema<T>
   defaultValues: T
@@ -23,7 +23,7 @@ interface EditDialogProps<T> {
   children: (form: UseFormReturn<T>) => React.ReactNode
 }
 
-export function EditDialog<T>({
+export function EditDialog<T extends FieldValues>({
   title,
   schema,
   defaultValues,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { EditDialog } from "@/components/admin/edit-dialog"
@@ -34,24 +34,24 @@ export default function ExperiencesPage() {
   const [editingExp, setEditingExp] = useState<Experience | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  function handleUnauthorized(res: Response) {
+  const handleUnauthorized = useCallback((res: Response) => {
     if (res.status === 401) {
       window.location.href = "/api/auth/signin"
       return true
     }
     return false
-  }
+  }, [])
 
-  async function fetchExperiences() {
+  const fetchExperiences = useCallback(async () => {
     const res = await fetch("/api/experiences")
     if (handleUnauthorized(res)) return
     const data = await res.json()
     setExperiences(data)
-  }
+  }, [handleUnauthorized])
 
   useEffect(() => {
     fetchExperiences()
-  }, [])
+  }, [fetchExperiences])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

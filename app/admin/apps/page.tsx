@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { EditDialog } from "@/components/admin/edit-dialog"
@@ -28,24 +28,24 @@ export default function AppsPage() {
   const [editingApp, setEditingApp] = useState<WebApp | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  function handleUnauthorized(res: Response) {
+  const handleUnauthorized = useCallback((res: Response) => {
     if (res.status === 401) {
       window.location.href = "/api/auth/signin"
       return true
     }
     return false
-  }
+  }, [])
 
-  async function fetchApps() {
+  const fetchApps = useCallback(async () => {
     const res = await fetch("/api/apps")
     if (handleUnauthorized(res)) return
     const data = await res.json()
     setApps(data)
-  }
+  }, [handleUnauthorized])
 
   useEffect(() => {
     fetchApps()
-  }, [])
+  }, [fetchApps])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
