@@ -1,7 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { EditDialog } from "@/components/admin/edit-dialog"
 
 interface Post {
   id: number
@@ -9,29 +11,38 @@ interface Post {
   content?: string
 }
 
+const postSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().optional(),
+})
+
+type PostForm = z.infer<typeof postSchema>
+
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([])
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+  const [editingPost, setEditingPost] = useState<Post | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
-  function handleUnauthorized(res: Response) {
+  const handleUnauthorized = useCallback((res: Response) => {
     if (res.status === 401) {
       window.location.href = "/api/auth/signin"
       return true
     }
     return false
-  }
+  }, [])
 
-  async function fetchPosts() {
+  const fetchPosts = useCallback(async () => {
     const res = await fetch("/api/posts")
     if (handleUnauthorized(res)) return
     const data = await res.json()
     setPosts(data)
-  }
+  }, [handleUnauthorized])
 
   useEffect(() => {
     fetchPosts()
-  }, [])
+  }, [fetchPosts])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -43,31 +54,34 @@ export default function PostsPage() {
     if (handleUnauthorized(res)) return
     setTitle("")
     setContent("")
+    setMessage("Post created")
     fetchPosts()
   }
 
   async function handleDelete(id: number) {
     const res = await fetch(`/api/posts/${id}`, { method: "DELETE" })
     if (handleUnauthorized(res)) return
+    setMessage("Post deleted")
     fetchPosts()
   }
 
-  async function handleUpdate(post: Post) {
-    const newTitle = prompt("Title", post.title)
-    if (newTitle === null) return
-    const newContent = prompt("Content", post.content || "")
-    const res = await fetch(`/api/posts/${post.id}`, {
+  async function handleUpdate(values: PostForm) {
+    if (!editingPost) return
+    const res = await fetch(`/api/posts/${editingPost.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle, content: newContent }),
+      body: JSON.stringify(values),
     })
     if (handleUnauthorized(res)) return
+    if (!res.ok) throw new Error("Failed to update")
+    setMessage("Post updated")
     fetchPosts()
   }
 
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Posts</h1>
+      {message && <p className="text-sm text-green-600">{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           value={title}
@@ -90,7 +104,7 @@ export default function PostsPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => handleUpdate(post)}
+              onClick={() => setEditingPost(post)}
             >
               Edit
             </Button>
@@ -104,6 +118,46 @@ export default function PostsPage() {
           </li>
         ))}
       </ul>
+      {editingPost && (
+        <EditDialog
+          title="Edit Post"
+          open={!!editingPost}
+          onOpenChange={(open) => {
+            if (!open) setEditingPost(null)
+          }}
+          schema={postSchema}
+          defaultValues={{
+            title: editingPost.title,
+            content: editingPost.content || "",
+          }}
+          onSubmit={handleUpdate}
+        >
+          {(form) => (
+            <>
+              <input
+                className="border p-2 w-full"
+                placeholder="Title"
+                {...form.register("title")}
+              />
+              {form.formState.errors.title && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.title.message as string}
+                </p>
+              )}
+              <textarea
+                className="border p-2 w-full"
+                placeholder="Content"
+                {...form.register("content")}
+              />
+              {form.formState.errors.content && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.content.message as string}
+                </p>
+              )}
+            </>
+          )}
+        </EditDialog>
+      )}
     </div>
   )
 }

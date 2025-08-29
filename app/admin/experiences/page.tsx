@@ -1,7 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { z } from "zod"
 import { Button } from "@/components/ui/button"
+import { EditDialog } from "@/components/admin/edit-dialog"
 
 interface Experience {
   id: number
@@ -12,6 +14,16 @@ interface Experience {
   description?: string
 }
 
+const expSchema = z.object({
+  company: z.string().min(1, "Company is required"),
+  role: z.string().min(1, "Role is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().optional(),
+  description: z.string().optional(),
+})
+
+type ExpForm = z.infer<typeof expSchema>
+
 export default function ExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([])
   const [company, setCompany] = useState("")
@@ -19,25 +31,27 @@ export default function ExperiencesPage() {
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [description, setDescription] = useState("")
+  const [editingExp, setEditingExp] = useState<Experience | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
-  function handleUnauthorized(res: Response) {
+  const handleUnauthorized = useCallback((res: Response) => {
     if (res.status === 401) {
       window.location.href = "/api/auth/signin"
       return true
     }
     return false
-  }
+  }, [])
 
-  async function fetchExperiences() {
+  const fetchExperiences = useCallback(async () => {
     const res = await fetch("/api/experiences")
     if (handleUnauthorized(res)) return
     const data = await res.json()
     setExperiences(data)
-  }
+  }, [handleUnauthorized])
 
   useEffect(() => {
     fetchExperiences()
-  }, [])
+  }, [fetchExperiences])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -52,40 +66,34 @@ export default function ExperiencesPage() {
     setStartDate("")
     setEndDate("")
     setDescription("")
+    setMessage("Experience added")
     fetchExperiences()
   }
 
   async function handleDelete(id: number) {
     const res = await fetch(`/api/experiences/${id}`, { method: "DELETE" })
     if (handleUnauthorized(res)) return
+    setMessage("Experience deleted")
     fetchExperiences()
   }
 
-  async function handleUpdate(exp: Experience) {
-    const newCompany = prompt("Company", exp.company)
-    if (newCompany === null) return
-    const newRole = prompt("Role", exp.role) || ""
-    const newStart = prompt("Start Date", exp.startDate) || ""
-    const newEnd = prompt("End Date", exp.endDate || "") || undefined
-    const newDesc = prompt("Description", exp.description || "") || undefined
-    const res = await fetch(`/api/experiences/${exp.id}`, {
+  async function handleUpdate(values: ExpForm) {
+    if (!editingExp) return
+    const res = await fetch(`/api/experiences/${editingExp.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        company: newCompany,
-        role: newRole,
-        startDate: newStart,
-        endDate: newEnd,
-        description: newDesc,
-      }),
+      body: JSON.stringify(values),
     })
     if (handleUnauthorized(res)) return
+    if (!res.ok) throw new Error("Failed to update")
+    setMessage("Experience updated")
     fetchExperiences()
   }
 
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Experiences</h1>
+      {message && <p className="text-sm text-green-600">{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           value={company}
@@ -126,7 +134,7 @@ export default function ExperiencesPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => handleUpdate(exp)}
+              onClick={() => setEditingExp(exp)}
             >
               Edit
             </Button>
@@ -140,6 +148,69 @@ export default function ExperiencesPage() {
           </li>
         ))}
       </ul>
+      {editingExp && (
+        <EditDialog
+          title="Edit Experience"
+          open={!!editingExp}
+          onOpenChange={(open) => {
+            if (!open) setEditingExp(null)
+          }}
+          schema={expSchema}
+          defaultValues={{
+            company: editingExp.company,
+            role: editingExp.role,
+            startDate: editingExp.startDate,
+            endDate: editingExp.endDate || "",
+            description: editingExp.description || "",
+          }}
+          onSubmit={handleUpdate}
+        >
+          {(form) => (
+            <>
+              <input
+                className="border p-2 w-full"
+                placeholder="Company"
+                {...form.register("company")}
+              />
+              {form.formState.errors.company && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.company.message as string}
+                </p>
+              )}
+              <input
+                className="border p-2 w-full"
+                placeholder="Role"
+                {...form.register("role")}
+              />
+              {form.formState.errors.role && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.role.message as string}
+                </p>
+              )}
+              <input
+                type="date"
+                className="border p-2 w-full"
+                {...form.register("startDate")}
+              />
+              {form.formState.errors.startDate && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.startDate.message as string}
+                </p>
+              )}
+              <input
+                type="date"
+                className="border p-2 w-full"
+                {...form.register("endDate")}
+              />
+              <textarea
+                className="border p-2 w-full"
+                placeholder="Description"
+                {...form.register("description")}
+              />
+            </>
+          )}
+        </EditDialog>
+      )}
     </div>
   )
 }
