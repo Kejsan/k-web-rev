@@ -1,7 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useForm, UseFormReturn, FieldValues } from "react-hook-form"
+import {
+  useForm,
+  UseFormReturn,
+  FieldValues,
+  DefaultValues,
+} from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ZodSchema } from "zod"
 import {
@@ -16,7 +21,7 @@ import { Button } from "@/components/ui/button"
 interface EditDialogProps<T extends FieldValues> {
   title: string
   schema: ZodSchema<T>
-  defaultValues: T
+  defaultValues: DefaultValues<T>
   open: boolean
   onOpenChange: (open: boolean) => void
   onSubmit: (values: T) => Promise<void>
