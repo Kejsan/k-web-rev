@@ -17,7 +17,7 @@ export default function Portfolio() {
   const experienceRef = useRef<HTMLDivElement>(null)
   const blogRef = useRef<HTMLDivElement>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [footer, setFooter] = useState<any>(null)
+  const [settings, setSettings] = useState<any>(null)
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -156,7 +156,7 @@ export default function Portfolio() {
   useEffect(() => {
     fetch('/api/footer')
       .then((res) => res.json())
-      .then((data) => setFooter(data))
+      .then((data) => setSettings(data))
   }, [])
 
   const scrollToTop = () => {
@@ -244,14 +244,14 @@ export default function Portfolio() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto text-center">
-          {footer && (
+          {settings && (
             <div className="text-white/60">
-              {footer.copyright}
-              {footer.linkedin && (
+              {settings.copyright}
+              {settings.linkedin && (
                 <>
                   {" "}|{" "}
                   <a
-                    href={footer.linkedin}
+                    href={settings.linkedin}
                     target="_blank"
                     rel="noreferrer noopener"
                     className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
@@ -260,11 +260,11 @@ export default function Portfolio() {
                   </a>
                 </>
               )}
-              {footer.github && (
+              {settings.github && (
                 <>
                   {" "}|{" "}
                   <a
-                    href={footer.github}
+                    href={settings.github}
                     target="_blank"
                     rel="noreferrer noopener"
                     className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
@@ -273,11 +273,11 @@ export default function Portfolio() {
                   </a>
                 </>
               )}
-              {footer.email && (
+              {settings.email && (
                 <>
                   {" "}|{" "}
                   <a
-                    href={`mailto:${footer.email}`}
+                    href={`mailto:${settings.email}`}
                     className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
                   >
                     Email
