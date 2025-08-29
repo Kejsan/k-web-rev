@@ -16,8 +16,17 @@ export default function WorkSamplesPage() {
   const [url, setUrl] = useState("")
   const [description, setDescription] = useState("")
 
+  function handleUnauthorized(res: Response) {
+    if (res.status === 401) {
+      window.location.href = "/api/auth/signin"
+      return true
+    }
+    return false
+  }
+
   async function fetchSamples() {
     const res = await fetch("/api/worksamples")
+    if (handleUnauthorized(res)) return
     const data = await res.json()
     setSamples(data)
   }
@@ -28,11 +37,12 @@ export default function WorkSamplesPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/worksamples", {
+    const res = await fetch("/api/worksamples", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, url, description }),
     })
+    if (handleUnauthorized(res)) return
     setTitle("")
     setUrl("")
     setDescription("")
@@ -40,7 +50,8 @@ export default function WorkSamplesPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/worksamples/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/worksamples/${id}`, { method: "DELETE" })
+    if (handleUnauthorized(res)) return
     fetchSamples()
   }
 
@@ -49,11 +60,12 @@ export default function WorkSamplesPage() {
     if (newTitle === null) return
     const newUrl = prompt("URL", sample.url || "") || undefined
     const newDesc = prompt("Description", sample.description || "") || undefined
-    await fetch(`/api/worksamples/${sample.id}`, {
+    const res = await fetch(`/api/worksamples/${sample.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle, url: newUrl, description: newDesc }),
     })
+    if (handleUnauthorized(res)) return
     fetchSamples()
   }
 

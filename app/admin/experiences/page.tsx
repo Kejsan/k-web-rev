@@ -20,8 +20,17 @@ export default function ExperiencesPage() {
   const [endDate, setEndDate] = useState("")
   const [description, setDescription] = useState("")
 
+  function handleUnauthorized(res: Response) {
+    if (res.status === 401) {
+      window.location.href = "/api/auth/signin"
+      return true
+    }
+    return false
+  }
+
   async function fetchExperiences() {
     const res = await fetch("/api/experiences")
+    if (handleUnauthorized(res)) return
     const data = await res.json()
     setExperiences(data)
   }
@@ -32,11 +41,12 @@ export default function ExperiencesPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch("/api/experiences", {
+    const res = await fetch("/api/experiences", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ company, role, startDate, endDate, description }),
     })
+    if (handleUnauthorized(res)) return
     setCompany("")
     setRole("")
     setStartDate("")
@@ -46,7 +56,8 @@ export default function ExperiencesPage() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/experiences/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/experiences/${id}`, { method: "DELETE" })
+    if (handleUnauthorized(res)) return
     fetchExperiences()
   }
 
@@ -57,7 +68,7 @@ export default function ExperiencesPage() {
     const newStart = prompt("Start Date", exp.startDate) || ""
     const newEnd = prompt("End Date", exp.endDate || "") || undefined
     const newDesc = prompt("Description", exp.description || "") || undefined
-    await fetch(`/api/experiences/${exp.id}`, {
+    const res = await fetch(`/api/experiences/${exp.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -68,6 +79,7 @@ export default function ExperiencesPage() {
         description: newDesc,
       }),
     })
+    if (handleUnauthorized(res)) return
     fetchExperiences()
   }
 

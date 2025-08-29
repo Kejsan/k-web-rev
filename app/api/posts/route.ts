@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { getAdminSession } from '@/lib/auth'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 export async function GET() {
-  const session = await getAdminSession()
+  const session = await getServerSession(authOptions)
   if (!session) {
     return new NextResponse('Unauthorized', { status: 401 })
   }
@@ -12,7 +13,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await getAdminSession()
+  const session = await getServerSession(authOptions)
   if (!session) {
     return new NextResponse('Unauthorized', { status: 401 })
   }
