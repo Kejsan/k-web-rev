@@ -39,3 +39,6 @@ This project uses [NextAuth](https://next-auth.js.org/) with GitHub OAuth for th
 - `ADMIN_EMAILS` – comma separated list of GitHub email addresses allowed to access `/admin` and related API routes.
 
 The admin dashboard lives at `/admin` and provides links to manage posts, experiences, apps, work samples, and the site footer.
+
+> [!IMPORTANT]
+> For a detailed guide on setting up the environment variables and ensuring your GitHub email is configured correctly for admin access, please see the [Admin Section Setup Guide](./ADMIN_GUIDE.md).
