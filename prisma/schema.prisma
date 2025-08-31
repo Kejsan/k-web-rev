@@ -50,7 +50,17 @@ model SiteSettings {
   linkedin  String?
   github    String?
   twitter   String?
+  threads   String?
   email     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Tool {
+  id          Int      @id @default(autoincrement())
+  name        String
+  url         String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
