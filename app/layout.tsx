@@ -4,6 +4,7 @@ import Script from "next/script"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
+import FooterSection from "@/components/sections/footer-section"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -42,6 +43,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <FooterSection />
         <NewsletterPopup />
       </body>
     </html>
