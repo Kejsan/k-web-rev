@@ -22,6 +22,11 @@ export default function AdminNav() {
           </Link>
         </li>
         <li>
+          <Link className="hover:underline" href="/admin/tools">
+            Tools
+          </Link>
+        </li>
+        <li>
           <Link className="hover:underline" href="/admin/worksamples">
             Work Samples
           </Link>
@@ -35,4 +40,3 @@ export default function AdminNav() {
     </nav>
   )
 }
-
