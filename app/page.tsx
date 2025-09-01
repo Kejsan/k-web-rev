@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronUp } from "lucide-react"
+import { NAV_LINKS } from "@/lib/navigation-links"
 
 import HeroSection from "@/components/sections/hero-section"
 import AboutSection from "@/components/sections/about-section"
@@ -178,39 +179,42 @@ export default function Portfolio() {
           <div className="flex justify-between items-center py-4">
             <div className="text-white font-bold text-xl">Kejsan</div>
             <div className="hidden md:flex space-x-8">
-              <button
-                onClick={() => scrollToSection("about")}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                About
-              </button>
-              <button
-                onClick={() => scrollToSection("skills")}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                Skills
-              </button>
-              <button
-                onClick={() => scrollToSection("experience")}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                Experience
-              </button>
-              <button
-                onClick={() => scrollToSection("blog")}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                Blog
-              </button>
-              <Link href="/work-samples" className="text-white/80 hover:text-white transition-colors">
-                Work Samples
-              </Link>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                Contact
-              </button>
+              {NAV_LINKS.map((link) => {
+                if (link.href.startsWith("/#")) {
+                  const sectionId = link.href.substring(2);
+                  return (
+                    <button
+                      key={link.name}
+                      onClick={() => scrollToSection(sectionId)}
+                      className="text-white/80 hover:text-white transition-colors"
+                    >
+                      {link.name}
+                    </button>
+                  );
+                }
+                if (link.href.startsWith("http")) {
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/80 hover:text-white transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  )
+                }
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="text-white/80 hover:text-white transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>

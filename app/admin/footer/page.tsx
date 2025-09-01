@@ -9,6 +9,7 @@ interface SiteSettings {
   linkedin?: string
   github?: string
   twitter?: string
+  threads?: string
   email?: string
 }
 
@@ -69,6 +70,13 @@ export default function FooterPage() {
           value={data.twitter || ""}
           onChange={handleChange}
           placeholder="Twitter URL"
+          className="border p-2 w--full"
+        />
+        <input
+          name="threads"
+          value={data.threads || ""}
+          onChange={handleChange}
+          placeholder="Threads URL"
           className="border p-2 w-full"
         />
         <input
