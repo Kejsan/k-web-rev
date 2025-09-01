@@ -197,8 +197,6 @@ export default function Portfolio() {
                     key={link.name}
                     href={link.href}
                     className="text-white/80 hover:text-white transition-colors"
-                    target={link.isExternal ? "_blank" : undefined}
-                    rel={link.isExternal ? "noopener noreferrer" : undefined}
                   >
                     {link.name}
                   </Link>
