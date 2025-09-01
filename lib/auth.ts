@@ -4,7 +4,7 @@ import GitHub from "next-auth/providers/github"
 function adminEmails() {
   return (process.env.ADMIN_EMAILS ?? "")
     .split(",")
-    .map((e) => e.trim())
+    .map((e) => e.trim().toLowerCase())
     .filter(Boolean)
 }
 
@@ -17,14 +17,20 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      return adminEmails().includes(user.email ?? "")
+      if (!user?.email) {
+        return false
+      }
+      return adminEmails().includes(user.email.toLowerCase())
     },
   },
 }
 
 export async function getAdminSession() {
   const session = await getServerSession(authOptions)
-  if (!session || !adminEmails().includes(session.user?.email ?? "")) {
+  if (
+    !session?.user?.email ||
+    !adminEmails().includes(session.user.email.toLowerCase())
+  ) {
     return null
   }
   return session

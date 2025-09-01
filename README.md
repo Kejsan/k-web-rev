@@ -40,6 +40,3 @@ This project uses [NextAuth](https://next-auth.js.org/) with GitHub OAuth for th
 
 The admin dashboard lives at `/admin` and provides links to manage posts, experiences, apps, work samples, and the site footer.
 
-## Database setup
-
-This project now uses a PostgreSQL database. Set the `DATABASE_URL` environment variable to your database connection string before running Prisma migrations or starting the app.
