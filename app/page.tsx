@@ -192,19 +192,6 @@ export default function Portfolio() {
                     </button>
                   );
                 }
-                if (link.href.startsWith("http")) {
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/80 hover:text-white transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  )
-                }
                 return (
                   <Link
                     key={link.name}
