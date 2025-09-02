@@ -232,53 +232,6 @@ export default function Portfolio() {
         </button>
       )}
 
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t border-white/10">
-        <div className="max-w-6xl mx-auto text-center">
-          {settings && (
-            <div className="text-white/60">
-              {settings.copyright}
-              {settings.linkedin && (
-                <>
-                  {" "}|{" "}
-                  <a
-                    href={settings.linkedin}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </>
-              )}
-              {settings.github && (
-                <>
-                  {" "}|{" "}
-                  <a
-                    href={settings.github}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
-                  >
-                    GitHub
-                  </a>
-                </>
-              )}
-              {settings.email && (
-                <>
-                  {" "}|{" "}
-                  <a
-                    href={`mailto:${settings.email}`}
-                    className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
-                  >
-                    Email
-                  </a>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      </footer>
     </div>
   )
 }

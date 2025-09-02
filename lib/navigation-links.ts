@@ -4,5 +4,6 @@ export const NAV_LINKS = [
   { name: "Experience", href: "/#experience", isExternal: false },
   { name: "Blog", href: "/blog", isExternal: false },
   { name: "Work Samples", href: "/work-samples", isExternal: false },
+  { name: "Apps", href: "/apps", isExternal: false },
   { name: "Contact", href: "/#contact", isExternal: false },
 ];
