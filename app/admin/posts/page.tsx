@@ -7,13 +7,19 @@ import { EditDialog } from "@/components/admin/edit-dialog"
 
 interface Post {
   id: number
+  slug: string
   title: string
   content?: string
+  metaDescription?: string
+  featuredBanner?: string
 }
 
 const postSchema = z.object({
+  slug: z.string().min(1, "Slug is required"),
   title: z.string().min(1, "Title is required"),
   content: z.string().optional(),
+  metaDescription: z.string().optional(),
+  featuredBanner: z.string().optional(),
 })
 
 type PostForm = z.infer<typeof postSchema>
@@ -21,7 +27,10 @@ type PostForm = z.infer<typeof postSchema>
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([])
   const [title, setTitle] = useState("")
+  const [slug, setSlug] = useState("")
   const [content, setContent] = useState("")
+  const [metaDescription, setMetaDescription] = useState("")
+  const [featuredBanner, setFeaturedBanner] = useState("")
   const [editingPost, setEditingPost] = useState<Post | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
@@ -49,17 +58,26 @@ export default function PostsPage() {
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({
+        slug,
+        title,
+        content,
+        metaDescription,
+        featuredBanner,
+      }),
     })
     if (handleUnauthorized(res)) return
+    setSlug("")
     setTitle("")
     setContent("")
+    setMetaDescription("")
+    setFeaturedBanner("")
     setMessage("Post created")
     fetchPosts()
   }
 
-  async function handleDelete(id: number) {
-    const res = await fetch(`/api/posts/${id}`, { method: "DELETE" })
+  async function handleDelete(slug: string) {
+    const res = await fetch(`/api/posts/${slug}`, { method: "DELETE" })
     if (handleUnauthorized(res)) return
     setMessage("Post deleted")
     fetchPosts()
@@ -67,7 +85,7 @@ export default function PostsPage() {
 
   async function handleUpdate(values: PostForm) {
     if (!editingPost) return
-    const res = await fetch(`/api/posts/${editingPost.id}`, {
+    const res = await fetch(`/api/posts/${editingPost.slug}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
@@ -84,6 +102,12 @@ export default function PostsPage() {
       {message && <p className="text-sm text-green-600">{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          placeholder="Slug"
+          className="border p-2 w-full"
+        />
+        <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
@@ -95,11 +119,23 @@ export default function PostsPage() {
           placeholder="Content"
           className="border p-2 w-full"
         />
+        <input
+          value={metaDescription}
+          onChange={(e) => setMetaDescription(e.target.value)}
+          placeholder="Meta Description"
+          className="border p-2 w-full"
+        />
+        <input
+          value={featuredBanner}
+          onChange={(e) => setFeaturedBanner(e.target.value)}
+          placeholder="Featured Banner URL"
+          className="border p-2 w-full"
+        />
         <Button type="submit">Add Post</Button>
       </form>
       <ul className="space-y-2">
         {posts.map((post) => (
-          <li key={post.id} className="flex items-center gap-2">
+          <li key={post.slug} className="flex items-center gap-2">
             <span className="flex-1">{post.title}</span>
             <Button
               type="button"
@@ -111,7 +147,7 @@ export default function PostsPage() {
             <Button
               type="button"
               variant="destructive"
-              onClick={() => handleDelete(post.id)}
+              onClick={() => handleDelete(post.slug)}
             >
               Delete
             </Button>
@@ -127,13 +163,26 @@ export default function PostsPage() {
           }}
           schema={postSchema}
           defaultValues={{
+            slug: editingPost.slug,
             title: editingPost.title,
             content: editingPost.content || "",
+            metaDescription: editingPost.metaDescription || "",
+            featuredBanner: editingPost.featuredBanner || "",
           }}
           onSubmit={handleUpdate}
         >
           {(form) => (
             <>
+              <input
+                className="border p-2 w-full"
+                placeholder="Slug"
+                {...form.register("slug")}
+              />
+              {form.formState.errors.slug && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.slug.message as string}
+                </p>
+              )}
               <input
                 className="border p-2 w-full"
                 placeholder="Title"
@@ -152,6 +201,26 @@ export default function PostsPage() {
               {form.formState.errors.content && (
                 <p className="text-sm text-red-500">
                   {form.formState.errors.content.message as string}
+                </p>
+              )}
+              <input
+                className="border p-2 w-full"
+                placeholder="Meta Description"
+                {...form.register("metaDescription")}
+              />
+              {form.formState.errors.metaDescription && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.metaDescription.message as string}
+                </p>
+              )}
+              <input
+                className="border p-2 w-full"
+                placeholder="Featured Banner URL"
+                {...form.register("featuredBanner")}
+              />
+              {form.formState.errors.featuredBanner && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.featuredBanner.message as string}
                 </p>
               )}
             </>
