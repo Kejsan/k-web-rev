@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
+import prisma from "@/lib/prisma"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -15,11 +16,16 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const [settings, apps] = await Promise.all([
+    prisma.siteSettings.findFirst(),
+    prisma.webApp.findMany(),
+  ])
+
   return (
     <html lang="en" className={inter.className}>
       <head>
@@ -43,7 +49,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <FooterSection />
+        <FooterSection settings={settings} apps={apps} />
         <NewsletterPopup />
       </body>
     </html>

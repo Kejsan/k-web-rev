@@ -1,31 +1,29 @@
-"use client"
-
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { NAV_LINKS } from "@/lib/navigation-links"
-import { SiteSettings } from "@prisma/client"
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
+import type { SiteSettings, WebApp } from "@prisma/client"
 
-import { WebApp } from "@prisma/client"
+interface FooterSectionProps {
+  settings: SiteSettings | null
+  apps: WebApp[]
+}
 
-export default function FooterSection() {
-  const [settings, setSettings] = useState<SiteSettings | null>(null)
-  const [apps, setApps] = useState<WebApp[]>([])
-
-  useEffect(() => {
-    fetch("/api/footer")
-      .then((res) => res.json())
-      .then((data) => setSettings(data))
-      .catch((err) => console.error("Failed to fetch site settings:", err))
-
-    fetch("/api/apps")
-      .then((res) => res.json())
-      .then((data) => setApps(data))
-      .catch((err) => console.error("Failed to fetch apps:", err))
-  }, [])
-
+export default function FooterSection({
+  settings,
+  apps,
+}: FooterSectionProps) {
+  // Render a lightweight skeleton while settings are loading
   if (!settings) {
-    return null // Or a loading skeleton
+    return (
+      <footer className="bg-slate-900/50 border-t border-white/10 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="animate-pulse space-y-4">
+            <div className="h-6 bg-slate-700/50 rounded w-1/4"></div>
+            <div className="h-4 bg-slate-700/50 rounded w-1/3"></div>
+          </div>
+        </div>
+      </footer>
+    )
   }
 
   return (
