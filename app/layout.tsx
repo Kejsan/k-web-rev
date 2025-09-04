@@ -6,7 +6,6 @@ import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
 import prisma from "@/lib/prisma"
-import { Prisma } from "@prisma/client"
 import type { SiteSettings, WebApp } from "@prisma/client"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -26,10 +25,6 @@ export default async function RootLayout({
   let settings: SiteSettings | null = null
   let apps: WebApp[] = []
 
-  const [settingsResult, appsResult] = await Promise.allSettled([
-    prisma.siteSettings.findFirst(),
-    prisma.webApp.findMany(),
-  ])
 
   if (settingsResult.status === "fulfilled") {
     settings = settingsResult.value
