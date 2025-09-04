@@ -18,7 +18,6 @@ export default function Portfolio() {
   const experienceRef = useRef<HTMLDivElement>(null)
   const blogRef = useRef<HTMLDivElement>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [settings, setSettings] = useState<any>(null)
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -152,12 +151,6 @@ export default function Portfolio() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    fetch('/api/footer')
-      .then((res) => res.json())
-      .then((data) => setSettings(data))
   }, [])
 
   const scrollToTop = () => {
