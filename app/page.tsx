@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronUp } from "lucide-react"
 import { NAV_LINKS } from "@/lib/navigation-links"
-import { SiteSettings } from "@prisma/client"
+import type { SiteSettings } from "@prisma/client"
 
 import HeroSection from "@/components/sections/hero-section"
 import AboutSection from "@/components/sections/about-section"
@@ -158,7 +158,7 @@ export default function Portfolio() {
   useEffect(() => {
     fetch("/api/footer")
       .then((res) => res.json())
-      .then((data: SiteSettings) => setSettings(data))
+      .then((data: SiteSettings | null) => setSettings(data))
   }, [])
 
   const scrollToTop = () => {
