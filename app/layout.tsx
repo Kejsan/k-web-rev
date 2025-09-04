@@ -6,6 +6,7 @@ import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
 import prisma from "@/lib/prisma"
+import type { SiteSettings, WebApp } from "@prisma/client"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,10 +22,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [settings, apps] = await Promise.all([
-    prisma.siteSettings.findFirst(),
-    prisma.webApp.findMany(),
-  ])
+  let settings: SiteSettings | null = null
+  let apps: WebApp[] = []
+
+  try {
+    ;[settings, apps] = await Promise.all([
+      prisma.siteSettings.findFirst(),
+      prisma.webApp.findMany(),
+    ])
+  } catch (error) {
+    console.error("Failed to load site data", error)
+  }
 
   return (
     <html lang="en" className={inter.className}>
