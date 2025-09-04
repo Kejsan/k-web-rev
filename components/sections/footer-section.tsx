@@ -1,17 +1,17 @@
 import Link from "next/link"
 import { NAV_LINKS } from "@/lib/navigation-links"
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
-import prisma from "@/lib/prisma"
 import type { SiteSettings, WebApp } from "@prisma/client"
 
-export default async function FooterSection() {
-  const [settings, apps] = await Promise.all<[
-    SiteSettings | null,
-    WebApp[],
-  ]>([
-    prisma.siteSettings.findFirst(),
-    prisma.webApp.findMany(),
-  ])
+interface FooterSectionProps {
+  settings: SiteSettings | null
+  apps: WebApp[]
+}
+
+export default function FooterSection({
+  settings,
+  apps,
+}: FooterSectionProps) {
 
   if (!settings) {
     return (
