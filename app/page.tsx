@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronUp } from "lucide-react"
 import { NAV_LINKS } from "@/lib/navigation-links"
+import { SiteSettings } from "@prisma/client"
 
 import HeroSection from "@/components/sections/hero-section"
 import AboutSection from "@/components/sections/about-section"
@@ -18,6 +19,7 @@ export default function Portfolio() {
   const experienceRef = useRef<HTMLDivElement>(null)
   const blogRef = useRef<HTMLDivElement>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [settings, setSettings] = useState<SiteSettings | null>(null)
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -153,6 +155,12 @@ export default function Portfolio() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    fetch("/api/footer")
+      .then((res) => res.json())
+      .then((data: SiteSettings) => setSettings(data))
+  }, [])
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -213,6 +221,52 @@ export default function Portfolio() {
       <NewsletterSection />
 
       <ContactSection />
+
+      {/* Footer */}
+      {settings && (
+        <footer className="py-8 px-4 border-t border-white/10">
+          <div className="max-w-6xl mx-auto text-center text-white/60">
+            {settings.copyright}
+            {settings.linkedin && (
+              <>
+                {" "}|{" "}
+                <a
+                  href={settings.linkedin}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                >
+                  LinkedIn
+                </a>
+              </>
+            )}
+            {settings.github && (
+              <>
+                {" "}|{" "}
+                <a
+                  href={settings.github}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                >
+                  GitHub
+                </a>
+              </>
+            )}
+            {settings.email && (
+              <>
+                {" "}|{" "}
+                <a
+                  href={`mailto:${settings.email}`}
+                  className="text-[#54a09b] hover:text-[#54a09b]/80 transition-colors"
+                >
+                  Email
+                </a>
+              </>
+            )}
+          </div>
+        </footer>
+      )}
 
       {/* Scroll to Top Button */}
       {showScrollTop && (

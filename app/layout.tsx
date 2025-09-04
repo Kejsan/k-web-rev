@@ -25,13 +25,27 @@ export default async function RootLayout({
   let settings: SiteSettings | null = null
   let apps: WebApp[] = []
 
-  try {
-    ;[settings, apps] = await Promise.all([
-      prisma.siteSettings.findFirst(),
-      prisma.webApp.findMany(),
-    ])
-  } catch (error) {
-    console.error("Failed to load site data", error)
+
+  if (settingsResult.status === "fulfilled") {
+    settings = settingsResult.value
+  } else if (
+    !(
+      settingsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
+      settingsResult.reason.code === "P2021"
+    )
+  ) {
+    throw settingsResult.reason
+  }
+
+  if (appsResult.status === "fulfilled") {
+    apps = appsResult.value
+  } else if (
+    !(
+      appsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
+      appsResult.reason.code === "P2021"
+    )
+  ) {
+    throw appsResult.reason
   }
 
   return (
