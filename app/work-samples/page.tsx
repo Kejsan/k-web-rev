@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { ArrowLeft, ExternalLink, ChevronUp, TrendingUp, Users, FileText, Globe } from "lucide-react"
 import Link from "next/link"
 import type { SiteSettings } from "@prisma/client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+
+export default function WorkSamples() {
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [settings, setSettings] = useState<SiteSettings | null>(null)
 
 export default function WorkSamples() {
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -56,8 +58,7 @@ export default function WorkSamples() {
   useEffect(() => {
     fetch("/api/footer")
       .then((res) => res.json())
-      .then((data: SiteSettings | null) => setSettings(data))
-  }, [])
+codex/import-sitesettings-and-update-usestate-types
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
