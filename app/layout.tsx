@@ -6,8 +6,7 @@ import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
 import prisma from "@/lib/prisma"
-import { Prisma } from "@prisma/client"
-import type { SiteSettings, WebApp } from "@prisma/client"
+import { Prisma, type SiteSettings, type WebApp } from "@prisma/client"
 
 const inter = Inter({ subsets: ["latin"] })
 

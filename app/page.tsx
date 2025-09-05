@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronUp } from "lucide-react"
-import { NAV_LINKS } from "@/lib/navigation-links"
 import type { SiteSettings } from "@prisma/client"
+import { NAV_LINKS } from "@/lib/navigation-links"
 
 import HeroSection from "@/components/sections/hero-section"
 import AboutSection from "@/components/sections/about-section"
