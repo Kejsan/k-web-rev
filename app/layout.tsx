@@ -6,9 +6,14 @@ import "./globals.css"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
 import prisma from "@/lib/prisma"
-import type { SiteSettings, WebApp } from "@prisma/client"
+import NewsletterPopup from "@/components/newsletter-popup"
+import FooterSection from "@/components/sections/footer-section"
+import prisma from "@/lib/prisma"
+import { Prisma, type SiteSettings, type WebApp } from "@prisma/client"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Kejsan - Digital Marketing Specialist",
@@ -22,14 +27,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  let settings: SiteSettings | null = null
-  let apps: WebApp[] = []
+const [settingsResult, appsResult] = await Promise.allSettled([
+  prisma.siteSettings.findFirst(),
+  prisma.webApp.findMany(),
+]);
 
-
-  if (settingsResult.status === "fulfilled") {
-    settings = settingsResult.value
-  } else if (
-    !(
+if (settingsResult.status === "fulfilled") {
+  settings = settingsResult.value;
+} else if (
+  !(
+    settingsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
+    settingsResult.reason.code === "P2021"
+  )
+) {
+  throw settingsResult.reason;
+}
       settingsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
       settingsResult.reason.code === "P2021"
     )
