@@ -10,6 +10,8 @@ import { Prisma, type SiteSettings, type WebApp } from "@prisma/client"
 
 const inter = Inter({ subsets: ["latin"] })
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Kejsan - Digital Marketing Specialist",
   description:
