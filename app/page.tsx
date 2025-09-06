@@ -66,8 +66,6 @@ export default function Portfolio() {
           )
           .add(
             {
-          .add(
-            {
               targets: ".hero-image",
               scale: [0.8, 1],
               opacity: [0, 1],
