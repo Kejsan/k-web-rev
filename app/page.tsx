@@ -26,6 +26,9 @@ export default function Portfolio() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+  const workSamples = [
+          )
+
   useEffect(() => {
     // Load anime.js dynamically
     const loadAnime = async () => {
@@ -63,9 +66,6 @@ export default function Portfolio() {
           )
           .add(
             {
-
-const workSamples = [
-          )
           .add(
             {
               targets: ".hero-image",
