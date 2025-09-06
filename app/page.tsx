@@ -27,7 +27,7 @@ export default function Portfolio() {
 }
 
   const workSamples = [
-          )
+  
 
   useEffect(() => {
     // Load anime.js dynamically
