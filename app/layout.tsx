@@ -2,10 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import Script from "next/script"
 import { Inter } from "next/font/google"
+
 import "./globals.css"
-import NewsletterPopup from "@/components/newsletter-popup"
-import FooterSection from "@/components/sections/footer-section"
-import prisma from "@/lib/prisma"
 import NewsletterPopup from "@/components/newsletter-popup"
 import FooterSection from "@/components/sections/footer-section"
 import prisma from "@/lib/prisma"
@@ -27,21 +25,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-const [settingsResult, appsResult] = await Promise.allSettled([
-  prisma.siteSettings.findFirst(),
-  prisma.webApp.findMany(),
-]);
+  let settings: SiteSettings | null = null
+  let apps: WebApp[] = []
 
-if (settingsResult.status === "fulfilled") {
-  settings = settingsResult.value;
-} else if (
-  !(
-    settingsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
-    settingsResult.reason.code === "P2021"
-  )
-) {
-  throw settingsResult.reason;
-}
+  const [settingsResult, appsResult] = await Promise.allSettled([
+    prisma.siteSettings.findFirst(),
+    prisma.webApp.findMany(),
+  ]);
+
+  if (settingsResult.status === "fulfilled") {
+    settings = settingsResult.value
+  } else if (
+    !(
       settingsResult.reason instanceof Prisma.PrismaClientKnownRequestError &&
       settingsResult.reason.code === "P2021"
     )
