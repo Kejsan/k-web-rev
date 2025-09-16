@@ -22,6 +22,13 @@ export default function Portfolio() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [settings, setSettings] = useState<SiteSettings | null>(null)
 
+  const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+  const workSamples = [
+  
+
   useEffect(() => {
     // Load anime.js dynamically
     const loadAnime = async () => {
@@ -56,14 +63,6 @@ export default function Portfolio() {
               duration: 600,
             },
             "-=400",
-          )
-          .add(
-            {
-     const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-const workSamples = [
           )
           .add(
             {
@@ -163,7 +162,6 @@ useEffect(() => {
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
-  }, [])
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })

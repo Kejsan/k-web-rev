@@ -9,10 +9,6 @@ export default function WorkSamples() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [settings, setSettings] = useState<SiteSettings | null>(null)
 
-export default function WorkSamples() {
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  const [settings, setSettings] = useState<SiteSettings | null>(null)
-
   useEffect(() => {
     // Load anime.js dynamically
     const loadAnime = async () => {
