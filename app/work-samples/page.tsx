@@ -1,13 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowLeft, ExternalLink, ChevronUp, TrendingUp, Users, FileText, Globe } from "lucide-react"
 import Link from "next/link"
+import { ArrowLeft, ExternalLink, ChevronUp, TrendingUp, Users, FileText, Globe } from "lucide-react"
 import type { SiteSettings } from "@prisma/client"
 
-export default function WorkSamples() {
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  const [settings, setSettings] = useState<SiteSettings | null>(null)
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
   useEffect(() => {
     // Load anime.js dynamically
@@ -54,7 +53,10 @@ export default function WorkSamples() {
   useEffect(() => {
     fetch("/api/footer")
       .then((res) => res.json())
-      .then((data) => setSettings(data))
+      .then((data: SiteSettings | null) => setSettings(data))
+      .catch((error) => {
+        console.error("Failed to load footer settings", error)
+      })
   }, [])
 
   const scrollToTop = () => {
@@ -245,7 +247,7 @@ export default function WorkSamples() {
         {/* Work Samples */}
         <section className="px-4 pb-20">
           <div className="max-w-6xl mx-auto space-y-16">
-            {workSamples.map((sample, index) => (
+            {workSamples.map((sample) => (
               <Card
                 key={sample.id}
                 className="work-category bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300"
