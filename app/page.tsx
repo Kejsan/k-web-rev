@@ -59,14 +59,6 @@ export default function Portfolio() {
           )
           .add(
             {
-     const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-const workSamples = [
-          )
-          .add(
-            {
               targets: ".hero-image",
               scale: [0.8, 1],
               opacity: [0, 1],
@@ -154,16 +146,12 @@ const workSamples = [
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-useEffect(() => {
-  fetch("/api/footer")
-    .then((res) => res.json())
-    .then((data: SiteSettings | null) => setSettings(data));
-}, []);
 
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-  }, [])
+  useEffect(() => {
+    fetch("/api/footer")
+      .then((res) => res.json())
+      .then((data: SiteSettings | null) => setSettings(data));
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })

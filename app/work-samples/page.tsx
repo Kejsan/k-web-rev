@@ -9,10 +9,6 @@ export default function WorkSamples() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [settings, setSettings] = useState<SiteSettings | null>(null)
 
-export default function WorkSamples() {
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  const [settings, setSettings] = useState<SiteSettings | null>(null)
-
   useEffect(() => {
     // Load anime.js dynamically
     const loadAnime = async () => {
@@ -58,7 +54,8 @@ export default function WorkSamples() {
   useEffect(() => {
     fetch("/api/footer")
       .then((res) => res.json())
-codex/import-sitesettings-and-update-usestate-types
+      .then((data) => setSettings(data))
+  }, [])
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
